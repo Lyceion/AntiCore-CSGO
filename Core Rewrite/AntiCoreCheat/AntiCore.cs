@@ -12,7 +12,6 @@ namespace AntiCoreCheat
         /// Uygulamanın ana girdi noktası.
         /// </summary>
         [STAThread]
-        [VMProtect.BeginUltra]
         static void Main()
         {
             Application.EnableVisualStyles();

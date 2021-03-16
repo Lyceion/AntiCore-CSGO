@@ -51,9 +51,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="VMProtect.SDK">
-      <HintPath>..\..\..\..\..\..\Program Files\VMProtect Ultimate\Lib\Windows\Net\VMProtect.SDK.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Design\OvalPictureBox.cs">
@@ -94,9 +91,10 @@
     <Compile Include="SDK\Classes\Structs.cs" />
     <Compile Include="SDK\Entities\CSPlayer.cs" />
     <Compile Include="SDK\Functions\Helpers.cs" />
+    <Compile Include="SDK\Game\Modules.cs" />
+    <Compile Include="SDK\Game\Offsets\Netvars.cs" />
+    <Compile Include="SDK\Game\Offsets\Signatures.cs" />
     <Compile Include="SDK\Memory\CylMemLite.cs" />
-    <Compile Include="SDK\Offsets\Netvars.cs" />
-    <Compile Include="SDK\Offsets\Signatures.cs" />
     <EmbeddedResource Include="Launcher\Launcher.resx">
       <DependentUpon>Launcher.cs</DependentUpon>
     </EmbeddedResource>

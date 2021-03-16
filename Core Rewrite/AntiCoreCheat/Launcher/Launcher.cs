@@ -91,13 +91,11 @@ namespace AntiCoreCheat.Launcher
             _height = Height;
         }
 
-        [VMProtect.BeginUltra]
         private void buttonExit_Click(object sender, EventArgs e)
         {
             Environment.Exit(69);
         }
 
-        [VMProtect.BeginUltra]
         private void buttonMinimize_Click(object sender, EventArgs e)
         {
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -105,13 +103,11 @@ namespace AntiCoreCheat.Launcher
             FormBorderStyle = FormBorderStyle.None;
         }
 
-        [VMProtect.BeginUltra]
         private void Launcher_Activated(object sender, EventArgs e)
         {
             FormBorderStyle = FormBorderStyle.None;
         }
 
-        [VMProtect.BeginUltra]
         public static void DrawOutline()
         {
             IntPtr hdc = GetWindowDC(_handle);
@@ -125,13 +121,11 @@ namespace AntiCoreCheat.Launcher
             ReleaseDC(_handle, hdc);
         }
 
-        [VMProtect.BeginUltra]
         private void Launcher_Paint(object sender, PaintEventArgs e)
         {
             DrawOutline();
         }
 
-        [VMProtect.BeginUltra]
         private void Launcher_Shown(object sender, EventArgs e)
         {
             panelMain.Controls.Add(main);

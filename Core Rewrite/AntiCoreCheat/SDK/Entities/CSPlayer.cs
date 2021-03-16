@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static AntiCoreCheat.SDK.Classes.Enums;
 using AntiCoreCheat.SDK.Memory;
-using AntiCoreCheat.SDK.Offsets;
+using AntiCoreCheat.SDK.Game.Offsets;
 
 namespace AntiCoreCheat.SDK.Entities
 {

@@ -6,7 +6,6 @@ namespace AntiCoreCheat.SDK.Functions
 {
     class Helpers
     {
-        [VMProtect.BeginUltra]
         public static async Task Sleep(double msec)
         {
             for (var since = DateTime.Now; (DateTime.Now - since).TotalMilliseconds < msec;)

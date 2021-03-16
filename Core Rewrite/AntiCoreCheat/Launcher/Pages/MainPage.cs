@@ -58,11 +58,9 @@ namespace AntiCoreCheat.Launcher.Pages
         public static string GetMicrosoftAccount(string userName) => GetMicrosoftAccount(GetSecurityIdentifier(userName ?? Environment.UserName));
 
         [DllImport("shell32.dll", EntryPoint = "#261", CharSet = CharSet.Unicode, PreserveSig = false)]
-        [VMProtect.BeginUltra]
         internal static extern void SHGetUserPicturePath(string name, GetUserPictureFlags flags, StringBuilder path, int pathLength);
 
         [DllImport("shell32.dll", EntryPoint = "#810", CharSet = CharSet.Unicode, PreserveSig = false)]
-        [VMProtect.BeginUltra]
         internal static extern void SHGetUserPicturePathEx(string name, GetUserPictureFlags flags, string desiredSrcExt, StringBuilder path, int pathLength, StringBuilder srcPath, int srcLength);
 
         public MainPage()
@@ -84,24 +82,22 @@ namespace AntiCoreCheat.Launcher.Pages
             var srcBuffer = new StringBuilder(1024);
             SHGetUserPicturePathEx(msAccountName ?? userName, GetUserPictureFlags.CreatePicturesDir, null, pathBuffer, pathBuffer.Capacity, srcBuffer, srcBuffer.Capacity);
             srcPath = srcBuffer.ToString();
-            if (srcPath.StartsWith(VMProtect.SDK.DecryptString("\\\\")))
+            if (srcPath.StartsWith("\\\\"))
             {
-                srcPath = Environment.GetFolderPath(Environment.SpecialFolder.System).Substring(0, 2) + srcPath.Substring(srcPath.IndexOf(VMProtect.SDK.DecryptString("\\"), 2));
+                srcPath = Environment.GetFolderPath(Environment.SpecialFolder.System).Substring(0, 2) + srcPath.Substring(srcPath.IndexOf("\\", 2));
             }
             return pathBuffer.ToString();
         }
 
-        [VMProtect.BeginUltra]
         private void MainPage_Load(object sender, EventArgs e)
         {
             GetUserPicturePath(null, out var temp);
             pictureBoxUserInfo.ImageLocation = temp;
-            labelUserInfo.Text = string.Format(VMProtect.SDK.DecryptString("Welcome, {0}!"), Environment.UserName);
+            labelUserInfo.Text = string.Format("Welcome, {0}!", Environment.UserName);
             panelUser.Location = new Point(-170, 6);
             MoveIt(panelUser, 12);
         }
 
-        [VMProtect.BeginUltra]
         async void MoveIt(Panel Moving, int LocationX)
         {
             if (Moving.Location.X < LocationX)
@@ -128,7 +124,6 @@ namespace AntiCoreCheat.Launcher.Pages
             Launcher.DrawOutline();
         }
 
-        [VMProtect.BeginUltra]
         private void ButtonLoad_Click(object sender, EventArgs e)
         {
             
