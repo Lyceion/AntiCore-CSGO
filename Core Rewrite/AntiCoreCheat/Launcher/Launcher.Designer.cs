@@ -34,9 +34,9 @@
             this.panelHeaderText = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.labelHeaderText = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.seperatorHeader = new System.Windows.Forms.Panel();
             this.panelMain = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.buttonMinimize = new AntiCoreCheat.Design.RoundedButton();
             this.buttonExit = new AntiCoreCheat.Design.RoundedButton();
             this.panelHeader.SuspendLayout();
@@ -101,11 +101,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(156)))), ((int)(((byte)(230)))));
             this.label2.Location = new System.Drawing.Point(88, 37);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 15);
+            this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "EXTERNAL";
             this.label2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Drag_MouseDown);
@@ -125,6 +125,16 @@
             this.labelHeaderText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Drag_MouseDown);
             this.labelHeaderText.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Drag_MouseMove);
             this.labelHeaderText.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Drag_MouseUp);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI Light", 18F);
+            this.label1.Location = new System.Drawing.Point(12, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(79, 32);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Anti - ";
             // 
             // seperatorHeader
             // 
@@ -146,16 +156,6 @@
             this.panelMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Drag_MouseDown);
             this.panelMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Drag_MouseMove);
             this.panelMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Drag_MouseUp);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI Light", 18F);
-            this.label1.Location = new System.Drawing.Point(12, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 32);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Anti - ";
             // 
             // buttonMinimize
             // 
@@ -203,6 +203,8 @@
             this.Name = "Launcher";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Activated += new System.EventHandler(this.Launcher_Activated);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Launcher_FormClosed);
+            this.Load += new System.EventHandler(this.Launcher_Load);
             this.Shown += new System.EventHandler(this.Launcher_Shown);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Launcher_Paint);
             this.panelHeader.ResumeLayout(false);

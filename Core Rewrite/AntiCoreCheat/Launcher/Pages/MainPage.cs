@@ -126,7 +126,8 @@ namespace AntiCoreCheat.Launcher.Pages
 
         private void ButtonLoad_Click(object sender, EventArgs e)
         {
-            
+            Versions.Globals.VersionMainCheatForm.Show();
+            this.Parent.Parent.Hide();
         }
     }
 }

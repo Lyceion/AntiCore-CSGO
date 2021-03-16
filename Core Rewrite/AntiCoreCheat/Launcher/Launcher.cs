@@ -126,9 +126,25 @@ namespace AntiCoreCheat.Launcher
             DrawOutline();
         }
 
+        private void Launcher_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Launcher_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
         private void Launcher_Shown(object sender, EventArgs e)
         {
+#if DEBUG
+            Logger.Log.Debug();
+            Logger.Log.Icon = this.Icon;
+#endif
+            Logger.Log.PrintLine(Logger.GetCurrentMethodName() + ", Hello from beginning!", LSDebug.TextType.Info);
             panelMain.Controls.Add(main);
+            this.BringToFront();
         }
     }
 }
