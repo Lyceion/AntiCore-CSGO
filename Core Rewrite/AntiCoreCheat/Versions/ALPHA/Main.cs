@@ -21,6 +21,8 @@ namespace AntiCoreCheat.Versions.ALPHA
         static Thread UpdatePlayersThrd = new Thread(new ThreadStart(UpdatePlayers));
         static Thread UpdateDebuggerGridThrd = new Thread(new ThreadStart(UpdateDebuggerGrid));
 
+        static SDK.Entities.CSLocalPlayer LocalPlayer;
+
         private void Main_Load(object sender, EventArgs e)
         {
             SDK.SDKManager.Enums.InitalizeResult Result = SDK.SDKManager.Initalize();
@@ -33,6 +35,7 @@ namespace AntiCoreCheat.Versions.ALPHA
                 MessageBox.Show("Error : " + Result.ToString(), "AntiCore", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Environment.Exit(0);
             }
+            LocalPlayer = new SDK.Entities.CSLocalPlayer();
             Logger.LSDebug.LSTV.Rows.Clear();
             UpdatePlayersThrd.Start();
         }
@@ -49,26 +52,25 @@ namespace AntiCoreCheat.Versions.ALPHA
 
         public static void UpdatePlayers()
         {
-            //Logger.LSDebug.PrintLine("Started player loop...");
+            Logger.LSDebug.PrintLine("Started player loop...", LSDebug.TextType.Info);
             for (int i = 0; i <= SDK.Game.Engine.MaxPlayer; i++)
             {
                 SDK.Entities.CSPlayer Player = new SDK.Entities.CSPlayer(i);
-                if (Player.Team == SDK.Classes.Enums.Team.CounterTerrorist || Player.Team == SDK.Classes.Enums.Team.Terrorist)
+                if ((Player.Team == SDK.Classes.Enums.Team.CounterTerrorist || Player.Team == SDK.Classes.Enums.Team.Terrorist) && Player.EntityIndex != LocalPlayer.EntityIndex && Player.Name != LocalPlayer.Name && LocalPlayer.BaseAddress != Player.BaseAddress)
                 {
                     PlayerList.Add(Player);
-                    //Logger.LSDebug.PrintLine(string.Format("Added {0} to list.", Player.EntityIndex));
                 }
             }
             UpdateDebuggerGridThrd.Start();
         }
         public static void UpdateDebuggerGrid()
         {
-            //Logger.LSDebug.PrintLine("Started datagrid loop...");
+            Logger.LSDebug.PrintLine("Started datagrid loop...", LSDebug.TextType.Info);
             while (true)
             {
                 foreach (var Player in PlayerList)
                 {
-                    Logger.LSDebug.SetVariable(string.Format("ID : {0}", Player.EntityIndex.ToString()), Player.Health);
+                    Logger.LSDebug.SetVariable(Player.Name, Player.Health);
                 }
                 Thread.Sleep(300);
             }

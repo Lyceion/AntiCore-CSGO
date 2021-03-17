@@ -3,6 +3,7 @@ using static AntiCoreCheat.SDK.Classes.Enums;
 using AntiCoreCheat.SDK.Memory;
 using AntiCoreCheat.SDK.Game.Offsets;
 using AntiCoreCheat.SDK.Game;
+using System.Text;
 
 namespace AntiCoreCheat.SDK.Entities
 {
@@ -12,11 +13,22 @@ namespace AntiCoreCheat.SDK.Entities
         {
 
         }
+
         public CSPlayer(int index)
         {
             EntityIndex = index;
         }
+
         public int EntityIndex;
+
+        public string Name
+        {
+            get
+            {
+                return CylMemLite.ReadString((CylMemLite.CRead<int>(CylMemLite.CRead<IntPtr>(Modules.ClientDLLAdress + Signatures.dwRadarBase) + 0x78) + (EntityIndex + 1) * 0x174) + 0x18);
+            }
+        }
+
         public IntPtr BaseAddress {
             get
             {

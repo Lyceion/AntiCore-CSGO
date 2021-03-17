@@ -78,22 +78,22 @@ namespace AntiCoreCheat.SDK.Entities
         {
             get
             {
-                return CylMemLite.CRead<ScopeLevels>(ActiveWeapon + Netvars.m_zoomLevel);
+                return (ScopeLevels)CylMemLite.CRead<int>(ActiveWeapon + Netvars.m_zoomLevel);
             }
             set
             {
-                CylMemLite.CWrite<ScopeLevels>(ActiveWeapon + Netvars.m_zoomLevel, value);
+                CylMemLite.CWrite<int>(ActiveWeapon + Netvars.m_zoomLevel, (ScopeLevels)value);
             }
         }
         public ObsMode ObsMode
         {
             get
             {
-                return CylMemLite.CRead<ObsMode>(BaseAddress + Netvars.m_iObserverMode);
+                return (ObsMode)CylMemLite.CRead<int>(BaseAddress + Netvars.m_iObserverMode);
             }
             set
             {
-                CylMemLite.CWrite<ObsMode>(BaseAddress + Netvars.m_iObserverMode, value);
+                CylMemLite.CWrite<int>(BaseAddress + Netvars.m_iObserverMode, (ObsMode)value);
             }
         }
         public float HealthShotBoostTime
