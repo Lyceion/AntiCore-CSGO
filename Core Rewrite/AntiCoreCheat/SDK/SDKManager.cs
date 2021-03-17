@@ -22,24 +22,24 @@ namespace AntiCoreCheat.SDK
                     Process game = p.FirstOrDefault();
                     CylMemLite.OpenProcess(game.Id);
                     Modules.Initalize();
-                    Logger.Log.PrintLine(Logger.GetCurrentMethodName() + ", Status Code : " + (int)Enums.InitalizeResult.Succes, LSDebug.TextType.Success);
-                    Logger.Log.PrintLine(" Status Information ");
-                    Logger.Log.PrintLine(" Process Id => " + game.Id);
-                    Logger.Log.PrintLine(" Process Handle => 0x" + CylMemLite.ProcessHandle.ToString("X"));
-                    Logger.Log.PrintLine(" Client => 0x" + Modules.Client.ToString("X"));
-                    Logger.Log.PrintLine(" Engine => 0x" + Modules.Engine.ToString("X"));
-                    Logger.Log.PrintLine(" -------------------------------------------------------- ");
+                    Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + ", Status : " + Enums.InitalizeResult.Succes, LSDebug.TextType.Success);
+                    Logger.LSDebug.EnableVariableDebugger();
+                    Logger.LSDebug.SetVariable("Process ID", game.Id);
+                    Logger.LSDebug.SetVariable("Process Handle", CylMemLite.ProcessHandle);
+                    Logger.LSDebug.SetVariable("Client Address", Modules.ClientDLLAdress);
+                    Logger.LSDebug.SetVariable("Engine Address", Modules.EngineDLLAdress);
+                    Game.Offsets.OffsetsManager.InitializeOffsetManager();
                     return Enums.InitalizeResult.Succes;
                 }
                 else
                 {
-                    Logger.Log.PrintLine(Logger.GetCurrentMethodName() + ", Error Code : " + (int)Enums.InitalizeResult.ProcessNotWorking, LSDebug.TextType.Failed);
+                    Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + ", Error Code : " + (int)Enums.InitalizeResult.ProcessNotWorking, LSDebug.TextType.Failed);
                     return Enums.InitalizeResult.ProcessNotWorking;
                 }
             } 
             catch
             {
-                Logger.Log.PrintLine(Logger.GetCurrentMethodName() + ", Error Code : " + (int)Enums.InitalizeResult.ProcessNotWorking, LSDebug.TextType.Failed);
+                Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + ", Error Code : " + (int)Enums.InitalizeResult.ProcessNotWorking, LSDebug.TextType.Failed);
                 return Enums.InitalizeResult.Error;
             }
         }

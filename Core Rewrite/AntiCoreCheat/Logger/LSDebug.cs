@@ -8,6 +8,7 @@ using System.Text;
 Credits : https://github.com/lysep-corp/LSDebug
 Specialy thanks to LYSEP Corp.  <3
 */
+#pragma warning disable CS1998 // Zaman uyumsuz yöntemde 'await' işleçleri yok ve zaman uyumlu çalışacak
 namespace LSDebug
 {
     public enum TextType
@@ -125,8 +126,8 @@ namespace LSDebug
     #region LSDebugUI Main
     class LSDebugUI : Form
     {
-        private LSDebug LST = new LSDebug();
-        private LSDebugVariable LSTV = new LSDebugVariable();
+        public LSDebug LST = new LSDebug();
+        public LSDebugVariable LSTV = new LSDebugVariable();
         private LSSplitterPanel SPC = new LSSplitterPanel();
         public static bool VariableDebugger = false;
         public LSDebugUI() : base()
@@ -141,7 +142,6 @@ namespace LSDebug
                 Controls.Add(SPC);
                 SPC.Panel1.Controls.Add(LSTV);
                 SPC.Panel2.Controls.Add(LST);
-                SPC.WidthPanel = 380;
             }
             else
             {
@@ -155,29 +155,6 @@ namespace LSDebug
             LSTV.Visible = true;
             LSTV.Dock = DockStyle.Fill;
 
-        }
-
-        public void SaveLogs(string directory = null, string logFile = "LSDebug_Output")
-        {
-            string Path = string.Empty;
-            if(directory == null)
-            {
-                Path = Application.StartupPath;
-            }
-            else
-            {
-                Path = directory;
-            }
-            string FilePath = Path + @"\" + logFile + ".txt";
-            if (File.Exists(FilePath))
-            {
-                string buffer = File.ReadAllText(FilePath);
-                File.WriteAllText(FilePath, buffer + Environment.NewLine + LST.Text);
-            }
-            else
-            {
-                File.WriteAllText(FilePath, LST.Text);
-            }
         }
 
         public bool Symbolizator
@@ -202,12 +179,17 @@ namespace LSDebug
                 LST.TimeBool = value;
             }
         }
+
         #region VariableDebugger
         public async void SetVariable(string VariableName, short value)
         {
             LSTV.SetVariable(VariableName, value);
         }
         public async void SetVariable(string VariableName, int value)
+        {
+            LSTV.SetVariable(VariableName, value);
+        }
+        public async void SetVariable(string VariableName, IntPtr value)
         {
             LSTV.SetVariable(VariableName, value);
         }
@@ -231,11 +213,36 @@ namespace LSDebug
         {
             LSTV.SetVariable(VariableName, value);
         }
+        public void EnableVariableDebugger()
+        {
+            Controls.Clear();
+            SPC.BackColor = Color.FromArgb(23, 23, 23);
+            SPC.Dock = DockStyle.Fill;
+            SPC.Visible = true;
+            SPC.BorderStyle = BorderStyle.None;
+            Controls.Add(SPC);
+            SPC.Panel1.Controls.Add(LSTV);
+            SPC.Panel2.Controls.Add(LST);
+            SPC.WidthPanel = 380;
+            PrintLine("Variable Debugger enabled.", TextType.Info);
+        }
+
+        public void DisableVariableDebugger()
+        {
+            Controls.Clear();
+            Controls.Add(LST);
+            PrintLine("Variable Debugger disabled.", TextType.Info);
+        }
         #endregion
+
         #region ConsoleDebugger
         public void Debug()
         {
             this.Show();
+        }
+        public void StopDebugging()
+        {
+            this.Hide();
         }
         public async void Print(object text)
         {
@@ -272,6 +279,14 @@ namespace LSDebug
         public async void DumpBytes(byte[] bytes, int offset, string label)
         {
             this.LST.DumpBytes(bytes, offset, label);
+        }
+        public void SaveLog(string directory = null, string logFile = "LSDebug_Output")
+        {
+            string Path = string.Format(@"{0}\{1}.txt", directory == null ? Application.StartupPath : directory, logFile);
+            if (File.Exists(Path))
+                File.WriteAllText(Path, File.ReadAllText(Path) + Environment.NewLine + LST.Text);
+            else
+                File.WriteAllText(Path, LST.Text);
         }
         #endregion
     }
@@ -760,6 +775,43 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
+        public void SetVariable(string VariableName, IntPtr value)
+        {
+            if (tmpv.Equals(VariableName))
+            {
+                Rows[tmpin].Cells[1].Value = value;
+                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
+                return;
+            }
+            tmpv = VariableName;
+            if (CheckInRow(VariableName))
+            {
+                int i = GetIndexByVarName(VariableName);
+                tmpin = i;
+
+                if (i >= 0)
+                {
+                    Rows[i].Cells[1].Value = value;
+                    Rows[i].Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
+                }
+            }
+            else
+            {
+                DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
+                row.Tag = VariableName;
+                row.Cells[0].Value = VariableName;
+                row.Cells[1].Value = value;
+                row.Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
+                row.Cells[3].Value = "IntPtr";
+                row.Height = 30;
+                tmpin = Rows.Add(row);
+
+            }
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
+        }
         public void SetVariable(string VariableName, float value)
         {
             if (tmpv.Equals(VariableName))
@@ -992,3 +1044,4 @@ namespace LSDebug
     }
     #endregion
 }
+#pragma warning restore CS1998

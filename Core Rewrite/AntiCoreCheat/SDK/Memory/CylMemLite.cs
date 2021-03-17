@@ -80,11 +80,6 @@ namespace AntiCoreCheat.SDK.Memory
             LargePages = 0x20000000
         }
 
-        internal static int ReadInt(object p)
-        {
-            throw new NotImplementedException();
-        }
-
         [Flags]
         public enum MemoryProtection
         {
@@ -469,7 +464,7 @@ namespace AntiCoreCheat.SDK.Memory
             int Scaned = (int)scanner.FindPattern(mPattern, out long time);
             if (Scaned != 0)
             {
-                var Scan = CylMemLite.ReadInt(Scaned + Offset) + Extra;
+                var Scan = CylMemLite.CRead<int>((IntPtr)(Scaned + Offset)) + Extra;
                 if (ModuleSubract)
                     Scan -= (int)SelectedModule.BaseAddress;
                 return Scan;

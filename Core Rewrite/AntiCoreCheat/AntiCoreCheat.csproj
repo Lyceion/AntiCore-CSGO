@@ -93,10 +93,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDK\Classes\Enums.cs" />
     <Compile Include="SDK\Classes\Structs.cs" />
+    <Compile Include="SDK\Entities\CSLocalPlayer.cs" />
     <Compile Include="SDK\Entities\CSPlayer.cs" />
     <Compile Include="SDK\Functions\Helpers.cs" />
+    <Compile Include="SDK\Functions\Parsers.cs" />
+    <Compile Include="SDK\Game\Engine.cs" />
     <Compile Include="SDK\Game\Modules.cs" />
     <Compile Include="SDK\Game\Offsets\Netvars.cs" />
+    <Compile Include="SDK\Game\Offsets\OffsetsManager.cs" />
     <Compile Include="SDK\Game\Offsets\Signatures.cs" />
     <Compile Include="SDK\Memory\CylMemLite.cs" />
     <Compile Include="SDK\SDKManager.cs" />

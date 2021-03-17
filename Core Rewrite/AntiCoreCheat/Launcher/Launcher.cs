@@ -133,18 +133,20 @@ namespace AntiCoreCheat.Launcher
 
         private void Launcher_FormClosed(object sender, FormClosedEventArgs e)
         {
+            Logger.LSDebug.SaveLog();
             Environment.Exit(0);
         }
 
         private void Launcher_Shown(object sender, EventArgs e)
         {
 #if DEBUG
-            Logger.Log.Debug();
-            Logger.Log.Icon = this.Icon;
+            Logger.LSDebug.Debug();
+            Logger.LSDebug.Icon = Icon;
 #endif
-            Logger.Log.PrintLine(Logger.GetCurrentMethodName() + ", Hello from beginning!", LSDebug.TextType.Info);
+            Logger.LSDebug.PrintLine("This debugger is powered by LSDebugger. github/lysep-corp", Color.Aqua);
+            Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + ", Hello from beginning!", LSDebug.TextType.Info);
             panelMain.Controls.Add(main);
-            this.BringToFront();
+            BringToFront();
         }
     }
 }

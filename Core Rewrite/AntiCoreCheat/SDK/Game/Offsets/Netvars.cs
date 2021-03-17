@@ -38,6 +38,7 @@ namespace AntiCoreCheat.SDK.Game.Offsets
         public static int m_iGlowIndex;
         public static int m_iShotsFired;
         public static int m_flFlashMaxAlpha;
+        public static int m_flFlashDuration;
         public static int m_bSpotted;
         public static int m_nViewModelIndex;
         public static int m_nModelIndex;
