@@ -317,6 +317,7 @@ namespace LSDebug
             BorderStyle = BorderStyle.None;
             ReadOnly = true;
             Cursor = Cursors.Default;
+            CheckForIllegalCrossThreadCalls = false;
         }
 
         #region Hex Dumping

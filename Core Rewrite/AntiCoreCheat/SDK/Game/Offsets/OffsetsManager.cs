@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace AntiCoreCheat.SDK.Game.Offsets
         }
         public static void InitializeOffsetManager()
         {
-            Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName(), LSDebug.TextType.Safe);
+            Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + ", invoked!", LSDebug.TextType.Safe);
             Logger.LSDebug.PrintLine("Starting getting signatures.", LSDebug.TextType.Info);
             GetSignatures();
             Logger.LSDebug.PrintLine("Starting getting netvars.", LSDebug.TextType.Info);
@@ -74,6 +75,8 @@ namespace AntiCoreCheat.SDK.Game.Offsets
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 Signatures.dwClientCmd = SigScan.ScanPatterna(Modules.EngineDLLName, "55 8B EC 8B 0D ? ? ? ? 81 F9 ? ? ? ? 75 0C A1 ? ? ? ? 35 ? ? ? ? EB 05 8B 01 FF 50 34 50 A1").ToInt32() - Modules.EngineDLLAdress.ToInt32();
                 Signatures.dwClientState = SigScan.ScanPattern(Modules.EngineDLLName, "A1 ? ? ? ? 33 D2 6A 00 6A 00 33 C9 89 B0", 1, 0, true);
                 Signatures.dwClientState_GetLocalPlayer = SigScan.ScanPattern(Modules.EngineDLLName, "8B 80 ? ? ? ? 40 C3", 2, 0, false);
@@ -190,7 +193,8 @@ namespace AntiCoreCheat.SDK.Game.Offsets
                 Signatures.anim_overlays = SigScan.ScanPattern(Modules.ClientDLLName, "8B 89 ? ? ? ? 8D 0C D1", 2, 0, true);
                 Signatures.m_flSpawnTime = SigScan.ScanPattern(Modules.ClientDLLName, "89 86 ? ? ? ? E8 ? ? ? ? 80 BE ? ? ? ? ?", 2, 0, true);
                 Signatures.find_hud_element = SigScan.ScanPatterna(Modules.ClientDLLName, "8B 3D ? ? ? ? 85 FF 0F 84 ? ? ? ? 81 C7").ToInt32() - Modules.EngineDLLAdress.ToInt32();
-                Logger.LSDebug.PrintLine("Signature scan success!", LSDebug.TextType.Success);
+                sw.Stop();
+                Logger.LSDebug.PrintLine("Signature scan success!" + string.Format(" - Elapsed time: {0}ms", sw.ElapsedMilliseconds), LSDebug.TextType.Success);
             }
             catch (Exception ex)
             {
@@ -201,6 +205,8 @@ namespace AntiCoreCheat.SDK.Game.Offsets
         {
             try 
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 NetvarManager.Init();
                 Netvars.m_vecViewOffset = NetvarManager.Table["DT_CSPlayer"]["m_vecViewOffset[0]"];
                 Netvars.m_vecOrigin = NetvarManager.Table["DT_CSPlayer"]["m_vecOrigin"];
@@ -240,7 +246,8 @@ namespace AntiCoreCheat.SDK.Game.Offsets
                 Netvars.m_iDefaultFOV = NetvarManager.Table["DT_CSPlayer"]["m_iDefaultFOV"];
                 Netvars.m_zoomLevel = NetvarManager.Table["DT_WeaponCSBaseGun"]["m_zoomLevel"];
                 Netvars.m_totalHitsOnServer = NetvarManager.Table["DT_CSPlayer"]["m_totalHitsOnServer"];
-                Logger.LSDebug.PrintLine("Netvar scan success!", LSDebug.TextType.Success);
+                sw.Stop();
+                Logger.LSDebug.PrintLine("Netvar scan success!" + string.Format(" - Elapsed time: {0}ms", sw.ElapsedMilliseconds), LSDebug.TextType.Success);
             }
             catch (Exception ex)
             {

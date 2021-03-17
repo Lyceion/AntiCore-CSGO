@@ -8,7 +8,7 @@ namespace AntiCoreCheat.SDK.Entities
 {
     class CSLocalPlayer : CSPlayer
     {
-#pragma warning disable CS0108
+        #pragma warning disable CS0108
         public IntPtr BaseAddress
         {
             get
