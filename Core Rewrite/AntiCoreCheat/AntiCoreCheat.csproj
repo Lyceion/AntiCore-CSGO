@@ -53,12 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Design\Aero.cs" />
     <Compile Include="Design\OvalPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Design\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Design\Shadow.cs" />
     <Compile Include="Design\ToggleSwitch\Renderers\ToggleSwitchAndroidRenderer.cs" />
     <Compile Include="Design\ToggleSwitch\Renderers\ToggleSwitchBrushedMetalRenderer.cs" />
     <Compile Include="Design\ToggleSwitch\Renderers\ToggleSwitchCarbonRenderer.cs" />
@@ -73,6 +75,8 @@
     <Compile Include="Design\ToggleSwitch\ToggleSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Features\Settings.cs" />
+    <Compile Include="Features\ThreadsCore.cs" />
     <Compile Include="Launcher\Launcher.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,5 +153,6 @@
   <ItemGroup>
     <None Include="Resources\Logo-SHADOW_BOI.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -27,6 +27,14 @@ namespace AntiCoreCheat.SDK.Memory
 
             [DllImport("kernel32.dll")]
             internal static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, IntPtr nSize, ref UInt32 lpNumberOfBytesWritten);
+            /*-------------*/
+
+            [DllImport("Kernel32.dll")]
+            internal static extern bool ReadProcessMemory(IntPtr hProcess, int lpBaseAddress, byte[] lpBuffer, UInt32 nSize, ref UInt32 lpNumberOfBytesRead);
+
+            [DllImport("kernel32.dll")]
+            internal static extern bool WriteProcessMemory(IntPtr hProcess, int lpBaseAddress, byte[] lpBuffer, IntPtr nSize, ref UInt32 lpNumberOfBytesWritten);
+            /*-------------*/
 
             [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
             internal static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, IntPtr dwSize, FreeType dwFreeType);
@@ -307,6 +315,22 @@ namespace AntiCoreCheat.SDK.Memory
             NativeMethods.WriteProcessMemory(ProcessHandle, Address, buffer, (IntPtr)buffer.Length, ref m_iBytesWritten);
         }
 
+        public static void CWrite<T>(int Address, object Value)
+        {
+            uint m_iBytesWritten = 0;
+            byte[] buffer = StructureToByteArray(Value);
+
+            NativeMethods.WriteProcessMemory(ProcessHandle, Address, buffer, (IntPtr)buffer.Length, ref m_iBytesWritten);
+        }
+
+        public static void CWrite<T>(int Address, char[] Value)
+        {
+            uint m_iBytesWritten = 0;
+            byte[] buffer = Encoding.UTF8.GetBytes(Value);
+
+            NativeMethods.WriteProcessMemory(ProcessHandle, Address, buffer, (IntPtr)buffer.Length, ref m_iBytesWritten);
+        }
+
         //public static T CRead<T>(IntPtr Address) where T : struct
         //{
         //    uint m_iBytesWritten = 0;
@@ -339,6 +363,14 @@ namespace AntiCoreCheat.SDK.Memory
         /// <typeparam name="T">Data Type</typeparam>
         /// <param name="Address">Memory Address</param>
         /// <returns></returns>
+        public static byte[] Read(int address, int length)
+        {
+            uint m_iBytesWritten = 0;
+            byte[] tempData = new byte[length];
+            NativeMethods.ReadProcessMemory(ProcessHandle, (IntPtr)address, tempData, (uint)length, ref m_iBytesWritten);
+            return tempData;
+        }
+
         public static byte[] Read(IntPtr address, int length)
         {
             uint m_iBytesWritten = 0;
@@ -346,6 +378,14 @@ namespace AntiCoreCheat.SDK.Memory
             NativeMethods.ReadProcessMemory(ProcessHandle, (IntPtr)address, tempData, (uint)length, ref m_iBytesWritten);
             return tempData;
         }
+
+        public static T CRead<T>(int Address)
+        {
+            var size = Marshal.SizeOf(typeof(T));
+            var data = Read(Address, size);
+            return GetStructure<T>(data);
+        }
+
         public static T CRead<T>(IntPtr Address)
         {
             var size = Marshal.SizeOf(typeof(T));
@@ -353,7 +393,7 @@ namespace AntiCoreCheat.SDK.Memory
             return GetStructure<T>(data);
         }
 
-        public static byte[] CRead2(int Address, int size)
+        public static byte[] CRead2(IntPtr Address, int size)
         {
             uint m_iBytesRead = 0;
             byte[] buffer = new byte[size];

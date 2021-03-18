@@ -242,6 +242,14 @@ namespace AntiCoreCheat.SDK.Entities
                 return CylMemLite.CRead<int>(BaseAddress + Netvars.m_iGlowIndex);
             }
         }
+
+        public int GlowObject
+        {
+            get
+            {
+                return CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager);
+            }
+        }
         //public GlowObject GlowObject
         //{
         //    get
@@ -264,15 +272,15 @@ namespace AntiCoreCheat.SDK.Entities
         //    CylMemLite.CWrite<bool>(GlowObject + ((GlowIndex * 0x38) + 0x25), false);
         //}
 
-        //public void Glow()
-        //{
-        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x4)), 1.0f);
-        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x8)), 0f);
-        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0xC)), 0f);
-        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x10)), 1.0f);
-        //    CylMemLite.CWrite<bool>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x24)), true);
-        //    CylMemLite.CWrite<bool>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x25)), false);
-        //}
+        public void Glow(float r, float g, float b, float a = 1.0f)
+        {
+            CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0x4), r);
+            CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0x8), g);
+            CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0xC), b);
+            CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0x10), a);
+            CylMemLite.CWrite<bool>(GlowObject + ((GlowIndex * 0x38) + 0x24), true);
+            CylMemLite.CWrite<bool>(GlowObject + ((GlowIndex * 0x38) + 0x25), false);
+        }
 
         //public static Vector3 GetBonePos(int entB, int bone)
         //{

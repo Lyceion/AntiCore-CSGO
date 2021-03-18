@@ -36,7 +36,7 @@ namespace AntiCoreCheat.SDK.Game
         {
             get
             {
-                return CylMemLite.CRead<GameState>(ClientState + Offsets.Signatures.dwClientState_State);
+                return (GameState)CylMemLite.CRead<int>(ClientState + Offsets.Signatures.dwClientState_State);
             }
         }
         public static int GetLocalPlayer
