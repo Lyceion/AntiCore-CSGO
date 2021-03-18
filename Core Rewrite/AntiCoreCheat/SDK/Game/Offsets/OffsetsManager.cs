@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using AntiCoreCheat.SDK.Memory;
 
 namespace AntiCoreCheat.SDK.Game.Offsets
@@ -75,6 +73,8 @@ namespace AntiCoreCheat.SDK.Game.Offsets
         {
             try
             {
+                Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + ", invoked!", LSDebug.TextType.Safe);
+                Application.DoEvents();
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 Signatures.dwClientCmd = SigScan.ScanPatterna(Modules.EngineDLLName, "55 8B EC 8B 0D ? ? ? ? 81 F9 ? ? ? ? 75 0C A1 ? ? ? ? 35 ? ? ? ? EB 05 8B 01 FF 50 34 50 A1").ToInt32() - Modules.EngineDLLAdress.ToInt32();
@@ -194,7 +194,9 @@ namespace AntiCoreCheat.SDK.Game.Offsets
                 Signatures.m_flSpawnTime = SigScan.ScanPattern(Modules.ClientDLLName, "89 86 ? ? ? ? E8 ? ? ? ? 80 BE ? ? ? ? ?", 2, 0, true);
                 Signatures.find_hud_element = SigScan.ScanPatterna(Modules.ClientDLLName, "8B 3D ? ? ? ? 85 FF 0F 84 ? ? ? ? 81 C7").ToInt32() - Modules.EngineDLLAdress.ToInt32();
                 sw.Stop();
-                Logger.LSDebug.PrintLine("Signature scan success!" + string.Format(" - Elapsed time: {0}ms", sw.ElapsedMilliseconds), LSDebug.TextType.Success);
+                Application.DoEvents();
+                Logger.LSDebug.PrintLine(string.Format("Signature scan success! - Elapsed time: {0}ms", sw.ElapsedMilliseconds), LSDebug.TextType.Success);
+                Application.DoEvents();
             }
             catch (Exception ex)
             {
@@ -205,6 +207,8 @@ namespace AntiCoreCheat.SDK.Game.Offsets
         {
             try 
             {
+                Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + ", invoked!", LSDebug.TextType.Safe);
+                Application.DoEvents();
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 NetvarManager.Init();
@@ -247,7 +251,9 @@ namespace AntiCoreCheat.SDK.Game.Offsets
                 Netvars.m_zoomLevel = NetvarManager.Table["DT_WeaponCSBaseGun"]["m_zoomLevel"];
                 Netvars.m_totalHitsOnServer = NetvarManager.Table["DT_CSPlayer"]["m_totalHitsOnServer"];
                 sw.Stop();
-                Logger.LSDebug.PrintLine("Netvar scan success!" + string.Format(" - Elapsed time: {0}ms", sw.ElapsedMilliseconds), LSDebug.TextType.Success);
+                Application.DoEvents();
+                Logger.LSDebug.PrintLine(string.Format("Netvar scan success! - Elapsed time: {0}ms", sw.ElapsedMilliseconds), LSDebug.TextType.Success);
+                Application.DoEvents();
             }
             catch (Exception ex)
             {

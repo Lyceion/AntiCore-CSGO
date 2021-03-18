@@ -1,23 +1,154 @@
-﻿using System;
+﻿using AntiCoreCheat.SDK.Game;
+using AntiCoreCheat.SDK.Game.Offsets;
+using AntiCoreCheat.SDK.Memory;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static AntiCoreCheat.SDK.Classes.Structs;
 
 namespace AntiCoreCheat.Versions.ALPHA
 {
     public partial class Main : Form
     {
+        [DllImport("user32.dll")]
+        internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct WindowCompositionAttributeData
+        {
+            public WindowCompositionAttribute Attribute;
+            public IntPtr Data;
+            public int SizeOfData;
+        }
+
+        internal enum WindowCompositionAttribute
+        {
+            // ...
+            WCA_ACCENT_POLICY = 19
+            // ...
+        }
+
+        internal enum AccentState
+        {
+            ACCENT_DISABLED = 0,
+            ACCENT_ENABLE_GRADIENT = 1,
+            ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+            ACCENT_ENABLE_BLURBEHIND = 3,
+            ACCENT_ENABLE_ACRYLIC = 4,
+            ACCENT_INVALID_STATE = 5
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct AccentPolicy
+        {
+            public AccentState AccentState;
+            public int AccentFlags;
+            public int GradientColor;
+            public int AnimationId;
+        }
+        public static void EnableBlur(IntPtr HWnd, bool hasFrame = true)
+        {
+            if(Environment.OSVersion.Version.Major >= 6)
+            {
+                AccentPolicy accent = new AccentPolicy();
+                accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLIC;
+                accent.GradientColor = 0xFD70000;
+                if (hasFrame)
+                    accent.AccentFlags = 0x20 | 0x40 | 0x80 | 0x100;
+
+                int accentStructSize = Marshal.SizeOf(accent);
+
+                IntPtr accentPtr = Marshal.AllocHGlobal(accentStructSize);
+                Marshal.StructureToPtr(accent, accentPtr, false);
+
+                WindowCompositionAttributeData data = new WindowCompositionAttributeData();
+                data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
+                data.SizeOfData = accentStructSize;
+                data.Data = accentPtr;
+
+                SetWindowCompositionAttribute(HWnd, ref data);
+
+                Marshal.FreeHGlobal(accentPtr);
+            }
+        }
+        public static void DisableBlur(IntPtr HWnd, bool hasFrame = true)
+        {
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                AccentPolicy accent = new AccentPolicy();
+                accent.AccentState = AccentState.ACCENT_DISABLED;
+                accent.GradientColor = 0xFD70000;
+                if (hasFrame)
+                    accent.AccentFlags = 0x20 | 0x40 | 0x80 | 0x100;
+
+                int accentStructSize = Marshal.SizeOf(accent);
+
+                IntPtr accentPtr = Marshal.AllocHGlobal(accentStructSize);
+                Marshal.StructureToPtr(accent, accentPtr, false);
+
+                WindowCompositionAttributeData data = new WindowCompositionAttributeData();
+                data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
+                data.SizeOfData = accentStructSize;
+                data.Data = accentPtr;
+
+                SetWindowCompositionAttribute(HWnd, ref data);
+
+                Marshal.FreeHGlobal(accentPtr);
+            }
+        }
         static List<SDK.Entities.CSPlayer> PlayerList = new List<SDK.Entities.CSPlayer>();
+
+        private bool mouseDown;
+        private Point lastLocation;
+        private void Drag_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDown = true;
+            lastLocation = e.Location;
+            DisableBlur(Handle, false);
+            Opacity = 0.85f;
+        }
+
+        private void Drag_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                Location = new Point(
+                    (Location.X - lastLocation.X) + e.X, (Location.Y - lastLocation.Y) + e.Y);
+
+                Update();
+            }
+        }
+
+        private void Drag_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDown = false;
+            EnableBlur(Handle);
+            Opacity = 1.0f;
+        }
+
         public Main()
         {
             InitializeComponent();
+            SetClassLong(this.Handle, GCL_STYLE, GetClassLong(this.Handle, GCL_STYLE) | CS_DropSHADOW);
         }
+
+        private const int CS_DropSHADOW = 0x20000;
+        private const int GCL_STYLE = (-26);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int SetClassLong(IntPtr hwnd, int nIndex, int dwNewLong);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetClassLong(IntPtr hwnd, int nIndex);
+
         static Thread UpdatePlayersThrd = new Thread(new ThreadStart(UpdatePlayers));
         static Thread UpdateDebuggerGridThrd = new Thread(new ThreadStart(UpdateDebuggerGrid));
 
@@ -25,10 +156,11 @@ namespace AntiCoreCheat.Versions.ALPHA
 
         private void Main_Load(object sender, EventArgs e)
         {
-            SDK.SDKManager.Enums.InitalizeResult Result = SDK.SDKManager.Initalize();
+            EnableBlur(Handle);
+            SDK.SDKManager.Enums.InitalizeResult Result = SDK.SDKManager.SDK_Initalize();
             if(Result == SDK.SDKManager.Enums.InitalizeResult.Succes)
             {
-                Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + " has been invoked!", LSDebug.TextType.Info);
+                Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + " has been invoked!", LSDebug.TextType.Safe);
             }
             else
             {
@@ -36,7 +168,7 @@ namespace AntiCoreCheat.Versions.ALPHA
                 Environment.Exit(0);
             }
             LocalPlayer = new SDK.Entities.CSLocalPlayer();
-            Logger.LSDebug.LSTV.Rows.Clear();
+            Logger.LSDebug.ClearAllVariables();
             UpdatePlayersThrd.Start();
         }
 
@@ -49,10 +181,11 @@ namespace AntiCoreCheat.Versions.ALPHA
         {
             Environment.Exit(0);
         }
-
         public static void UpdatePlayers()
         {
             Logger.LSDebug.PrintLine("Started player loop...", LSDebug.TextType.Info);
+            var sw = new Stopwatch();
+            sw.Start();
             for (int i = 0; i <= SDK.Game.Engine.MaxPlayer; i++)
             {
                 SDK.Entities.CSPlayer Player = new SDK.Entities.CSPlayer(i);
@@ -61,8 +194,11 @@ namespace AntiCoreCheat.Versions.ALPHA
                     PlayerList.Add(Player);
                 }
             }
+            sw.Stop();
+            Logger.LSDebug.PrintLine(string.Format("Updated Players. ({0} Players in list.) - Elapsed time: {1}ms", PlayerList.Count, sw.ElapsedMilliseconds), LSDebug.TextType.Success);
             UpdateDebuggerGridThrd.Start();
         }
+
         public static void UpdateDebuggerGrid()
         {
             Logger.LSDebug.PrintLine("Started datagrid loop...", LSDebug.TextType.Info);
@@ -71,9 +207,15 @@ namespace AntiCoreCheat.Versions.ALPHA
                 foreach (var Player in PlayerList)
                 {
                     Logger.LSDebug.SetVariable(Player.Name, Player.Health);
+                    Player.SpottedByMask = true;
                 }
                 Thread.Sleep(300);
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(69);
         }
     }
 }

@@ -59,5 +59,25 @@ namespace AntiCoreCheat.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+        /// </summary>
+        internal static System.Drawing.Bitmap Logo_SHADOW_BOI {
+            get {
+                object obj = ResourceManager.GetObject("Logo-SHADOW_BOI", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+        /// </summary>
+        internal static System.Drawing.Bitmap Logo_WithoutBG {
+            get {
+                object obj = ResourceManager.GetObject("Logo-WithoutBG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

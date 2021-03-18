@@ -1,5 +1,6 @@
 ﻿using System;
 using static AntiCoreCheat.SDK.Classes.Enums;
+using static AntiCoreCheat.SDK.Classes.Structs;
 using AntiCoreCheat.SDK.Memory;
 using AntiCoreCheat.SDK.Game.Offsets;
 using AntiCoreCheat.SDK.Game;
@@ -25,7 +26,7 @@ namespace AntiCoreCheat.SDK.Entities
         {
             get
             {
-                return CylMemLite.ReadString((CylMemLite.CRead<int>(CylMemLite.CRead<IntPtr>(Modules.ClientDLLAdress + Signatures.dwRadarBase) + 0x78) + (EntityIndex + 1) * 0x174) + 0x18);
+                return CylMemLite.ReadString((CylMemLite.CRead<int>(CylMemLite.CRead<IntPtr>(Modules.ClientDLLAdress + Signatures.dwRadarBase) + 0x78) + (EntityIndex + 2) * 0x174) + 0x18);
             }
         }
 
@@ -234,6 +235,44 @@ namespace AntiCoreCheat.SDK.Entities
                 return CylMemLite.CRead<float>(BaseAddress + Netvars.m_flFlashDuration);
             }
         }
+        public int GlowIndex
+        {
+            get
+            {
+                return CylMemLite.CRead<int>(BaseAddress + Netvars.m_iGlowIndex);
+            }
+        }
+        //public GlowObject GlowObject
+        //{
+        //    get
+        //    {
+        //        return 0;
+        //    }
+        //    set
+        //    {
+        //        CylMemLite.CWrite<GlowObject>((CylMemLite.CRead<IntPtr>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager)) + ((GlowIndex * 0x38)), value);
+        //    }
+        //}
+        //private static readonly IntPtr GlowObject = CylMemLite.CRead<IntPtr>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager);
+        //public static void Glow(int GlowIndex)
+        //{
+        //    CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0x4), 255f);
+        //    CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0x8), 0f);
+        //    CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0xC), 0f);
+        //    CylMemLite.CWrite<float>(GlowObject + ((GlowIndex * 0x38) + 0x10), 255f);
+        //    CylMemLite.CWrite<bool>(GlowObject + ((GlowIndex * 0x38) + 0x24), true);
+        //    CylMemLite.CWrite<bool>(GlowObject + ((GlowIndex * 0x38) + 0x25), false);
+        //}
+
+        //public void Glow()
+        //{
+        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x4)), 1.0f);
+        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x8)), 0f);
+        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0xC)), 0f);
+        //    CylMemLite.CWrite<float>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x10)), 1.0f);
+        //    CylMemLite.CWrite<bool>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x24)), true);
+        //    CylMemLite.CWrite<bool>((IntPtr)(CylMemLite.CRead<int>(Modules.ClientDLLAdress + Signatures.dwGlowObjectManager) + ((GlowIndex * 0x38) + 0x25)), false);
+        //}
 
         //public static Vector3 GetBonePos(int entB, int bone)
         //{

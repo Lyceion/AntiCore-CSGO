@@ -143,6 +143,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Logo-WithoutBG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logo-SHADOW_BOI.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
