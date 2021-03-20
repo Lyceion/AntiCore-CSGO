@@ -46,7 +46,7 @@ namespace AntiCoreCheat.Versions.ALPHA
         private void Drag_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDown = false;
-            Design.Aero.ChangeAccent(Handle, new Design.Aero.AccentPolicy { GradientColor = 0xFD70000, AccentState = Design.Aero.AccentState.ACCENT_ENABLE_ACRYLIC});
+            Design.Aero.ChangeAccent(Handle, new Design.Aero.AccentPolicy { GradientColor = 0xFD70000, AccentState = Design.Aero.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND});
             Opacity = 1.0f;
         }
 
@@ -56,14 +56,9 @@ namespace AntiCoreCheat.Versions.ALPHA
             Design.Shadow.AddShadow(this.Handle);
         }
 
-        //static Thread UpdatePlayersThrd = new Thread(new ThreadStart(UpdatePlayers));
-        //static Thread UpdateDebuggerGridThrd = new Thread(new ThreadStart(UpdateDebuggerGrid));
-
-        //static SDK.Entities.CSLocalPlayer LocalPlayer;
-
         private void Main_Load(object sender, EventArgs e)
         {
-            Design.Aero.ChangeAccent(Handle, new Design.Aero.AccentPolicy { GradientColor = 0xFD70000, AccentState = Design.Aero.AccentState.ACCENT_ENABLE_ACRYLIC });
+            Design.Aero.ChangeAccent(Handle, new Design.Aero.AccentPolicy { GradientColor = 0xFD70000, AccentState = Design.Aero.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND });
             SDK.SDKManager.Enums.InitalizeResult Result = SDK.SDKManager.SDK_Initalize();
             if(Result == SDK.SDKManager.Enums.InitalizeResult.Succes)
             {
@@ -75,7 +70,8 @@ namespace AntiCoreCheat.Versions.ALPHA
                 Environment.Exit(0);
             }
             Logger.LSDebug.ClearAllVariables();
-            //UpdatePlayersThrd.Start();
+            Logger.LSDebug.PrintLine(string.Format("{0} -> 0x{1}", nameof(Signatures.force_update_spectator_glow), Signatures.force_update_spectator_glow.ToString("X")));
+            ThreadsCore.PlayerThread.Start();
             ThreadsCore.CoreThread.Start();
         }
 
@@ -88,46 +84,13 @@ namespace AntiCoreCheat.Versions.ALPHA
         {
             Environment.Exit(0);
         }
-        //public static void UpdatePlayers()
-        //{
-        //    while(true)
-        //    {
-        //        Logger.LSDebug.PrintLine("Started player loop...", LSDebug.TextType.Info);
-        //        if (Engine.GameState == SDK.Classes.Enums.GameState.FULL)
-        //        {
-        //            var sw = new Stopwatch();
-        //            sw.Start();
-        //            for (int i = 0; i <= SDK.Game.Engine.MaxPlayer; i++)
-        //            {
-        //                SDK.Entities.CSPlayer Player = new SDK.Entities.CSPlayer(i);
-        //                if ((Player.Team == SDK.Classes.Enums.Team.CounterTerrorist || Player.Team == SDK.Classes.Enums.Team.Terrorist) && Player.EntityIndex != LocalPlayer.EntityIndex && Player.Name != LocalPlayer.Name && LocalPlayer.BaseAddress != Player.BaseAddress)
-        //                {
-        //                    PlayerList.Add(Player);
-        //                }
-        //            }
-        //            sw.Stop();
-        //            Logger.LSDebug.PrintLine(string.Format("Updated Players. ({0} Players in list.) - Elapsed time: {1}ms", PlayerList.Count, sw.ElapsedMilliseconds), LSDebug.TextType.Success);
-        //            UpdateDebuggerGrid();
-        //        }
-        //    }
-        //}
-
-        //public static void UpdateDebuggerGrid()
-        //{
-        //    Logger.LSDebug.PrintLine("Started datagrid loop...", LSDebug.TextType.Info);
-        //    while (true)
-        //    {
-        //        foreach (var Player in PlayerList)
-        //        {
-        //            Logger.LSDebug.SetVariable(Player.Name, Player.Health);
-        //            Player.Glow(255f, 0, 0f);
-        //        }
-        //        Thread.Sleep(300);
-        //    }
-        //}
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            do
+            {
+                CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 116);
+            } while (CylMemLite.CRead<byte>(Modules.ClientDLLAdress + Signatures.force_update_spectator_glow) != 116);
             Environment.Exit(69);
         }
     }

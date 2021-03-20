@@ -30,7 +30,7 @@ namespace AntiCoreCheat.SDK.Classes
 		}
 
         [StructLayout(LayoutKind.Explicit)]
-        public struct Color
+        public struct glColor
         {
             [FieldOffset(0x0)]
             public float r;
@@ -42,34 +42,21 @@ namespace AntiCoreCheat.SDK.Classes
             public float a;
         }
 
-        //Credits Dude719
-        [StructLayout(LayoutKind.Explicit)]
-        public struct GlowObject
+		[StructLayout(LayoutKind.Sequential)]
+		public struct glow_color
+		{
+			public float r;
+			public float g;
+			public float b;
+			public float a;
+		};
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct glow_settings
         {
-            [FieldOffset(0)]
-            public int entity; //0x0
-            [FieldOffset(0x4)]
-            public Color color; //0x4
-            [FieldOffset(0x14)]
-            public double fill1; //0x14
-            [FieldOffset(0x1C)]
-            public float bloomAmount; //0x1C
-            [FieldOffset(0x20)]
-            public int fill2; //0x20
-            [FieldOffset(0x24)]
-            public bool renderWhenOccluded; //0x24
-            [FieldOffset(0x25)]
-            public bool renderWhenUnoccluded; //0x25
-            [FieldOffset(0x26)]
-            public bool fullBloomRender; // 0x26
-            [FieldOffset(0x27)]
-            public int fullBloomStencilTestValue; //0x27
-            [FieldOffset(0x2B)]
-            public int splitScreenSlot; //0x2B
-            [FieldOffset(0x2F)]
-            public int nextFreeSlot; //0x2F
-            [FieldOffset(0x33)]
-            public int fill3;
-        }
-    }
+			public bool m_bRenderWhenOccluded;
+			public bool m_bRenderWhenUnoccluded;
+			public bool m_bFullBloomRender;
+		}
+	}
 }

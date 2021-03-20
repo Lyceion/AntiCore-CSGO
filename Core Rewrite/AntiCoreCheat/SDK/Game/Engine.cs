@@ -18,6 +18,7 @@ namespace AntiCoreCheat.SDK.Game
                 return CylMemLite.CRead<IntPtr>(Modules.EngineDLLAdress + Offsets.Signatures.dwClientState);
             }
         }
+
         public static int MaxPlayer
         {
             get
@@ -25,6 +26,7 @@ namespace AntiCoreCheat.SDK.Game
                 return CylMemLite.CRead<int>(ClientState + Offsets.Signatures.dwClientState_MaxPlayer);
             }
         }
+
         public static GlobalVars GlobalVars
         {
             get
@@ -32,6 +34,7 @@ namespace AntiCoreCheat.SDK.Game
                 return CylMemLite.CRead<GlobalVars>(Modules.EngineDLLAdress + Offsets.Signatures.dwGlobalVars);
             }
         }
+
         public static GameState GameState
         {
             get
@@ -39,16 +42,19 @@ namespace AntiCoreCheat.SDK.Game
                 return (GameState)CylMemLite.CRead<int>(ClientState + Offsets.Signatures.dwClientState_State);
             }
         }
+
         public static int GetLocalPlayer
         {
             get{
                 return CylMemLite.CRead<int>(ClientState + Offsets.Signatures.dwClientState_GetLocalPlayer);
             }
         }
+
         public static ClassID GetClassId(IntPtr EntBase)
         {
             return CylMemLite.CRead<ClassID>(CylMemLite.CRead<IntPtr>(CylMemLite.CRead<IntPtr>(CylMemLite.CRead<IntPtr>(EntBase + 8) + 2 * 4) + 1) + 20);
         }
+
         public static int EntityCount
         {
             get
@@ -60,10 +66,12 @@ namespace AntiCoreCheat.SDK.Game
                     return MaxPlayer;
             }
         }
+
         public static void ForceUpdate()
         {
             CylMemLite.CWrite<int>(ClientState + Offsets.Signatures.clientstate_delta_ticks, -1);
         }
+
         public static bool SendPackets
         {
             set

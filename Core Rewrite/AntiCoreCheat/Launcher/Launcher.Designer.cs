@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Launcher));
             this.panelHeader = new System.Windows.Forms.Panel();
             this.panelTiteBar = new System.Windows.Forms.Panel();
             this.panelControlBox = new System.Windows.Forms.Panel();
@@ -200,6 +201,7 @@
             this.Controls.Add(this.panelHeader);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Launcher";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Activated += new System.EventHandler(this.Launcher_Activated);

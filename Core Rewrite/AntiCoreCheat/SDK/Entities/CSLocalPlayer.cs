@@ -13,9 +13,10 @@ namespace AntiCoreCheat.SDK.Entities
         {
             get
             {
-                return CylMemLite.CRead<IntPtr>(Modules.ClientDLLAdress + Signatures.dwLocalPlayer);
+                return Client.LocalPlayerBase;
             }
         }
+
         public int EntityIndex
         {
             get
@@ -23,6 +24,7 @@ namespace AntiCoreCheat.SDK.Entities
                 return Engine.GetLocalPlayer;
             }
         }
+
         public Team Team
         {
             get
@@ -34,6 +36,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<int>(BaseAddress + Netvars.m_iTeamNum, (int)value);
             }
         }
+
         public bool IsScoped
         {
             get
@@ -45,6 +48,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<bool>(BaseAddress + Netvars.m_bIsScoped, value);
             }
         }
+
         public short ActiveWeaponID
         {
             get
@@ -56,6 +60,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<short>(ActiveWeapon + Netvars.m_iItemDefinitionIndex, value);
             }
         }
+
         public int ModelIndex
         {
             get
@@ -67,6 +72,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<int>(BaseAddress + Netvars.m_nModelIndex, value);
             }
         }
+
         public bool SpottedByMask
         {
             get
@@ -74,6 +80,7 @@ namespace AntiCoreCheat.SDK.Entities
                 return CylMemLite.CRead<bool>(BaseAddress + Netvars.m_bSpottedByMask);
             }
         }
+
         public ScopeLevels ScopeLevel
         {
             get
@@ -85,6 +92,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<int>(ActiveWeapon + Netvars.m_zoomLevel, (ScopeLevels)value);
             }
         }
+
         public ObsMode ObsMode
         {
             get
@@ -96,6 +104,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<int>(BaseAddress + Netvars.m_iObserverMode, (ObsMode)value);
             }
         }
+
         public float HealthShotBoostTime
         {
             get
@@ -107,6 +116,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<float>(BaseAddress + Netvars.m_flHealthShotBoostExpirationTime, Engine.GlobalVars.curtime + value);
             }
         }
+
         public float FlashMaxAlpha
         {
             get
@@ -118,6 +128,7 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<float>(BaseAddress + Netvars.m_flFlashMaxAlpha, value);
             }
         }
+
         public float FlashDuration
         {
             get
