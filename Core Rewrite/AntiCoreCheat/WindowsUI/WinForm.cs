@@ -23,7 +23,7 @@ namespace WindowsUI
         Label lblProgram = new Label();
         Button btnMinimaze = new Button();
         Button btnMaximize = new Button();
-        Button btnClose = new Button();
+        public Button btnClose = new Button();
         PictureBox pbProgram = new PictureBox();
 
         [Category("Windows UI - Control Bar")]
@@ -128,13 +128,20 @@ namespace WindowsUI
             }
         }
 
+        public Enums.AccentState FormAccentState = Enums.AccentState.ACCENT_ENABLE_HOSTBACKDROP;
+
+        public void SetFormAccentState(Enums.AccentState value)
+        {
+            Aero.ChangeAccent(Handle, new Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = value });
+        }
+
         private void WinForm_Load(object sender, EventArgs e)
         {
+            this.Controls.Add(pnlTop);
             pnlTop.Size = new Size(560, 30);
             pnlTop.Dock = DockStyle.Top;
             pnlTop.BackColor = Color.Black;
             pnlTop.MouseDown += new MouseEventHandler(DoDrag);
-            this.Controls.Add(pnlTop);
 
             btnMinimaze.ForeColor = Color.White;
             btnMinimaze.BackColor = pnlTop.BackColor;
@@ -162,6 +169,7 @@ namespace WindowsUI
             btnMaximize.Font = new Font("Segoe UI Symbol", 9f);
             btnMaximize.Text = "◻";
             btnMaximize.Click += new EventHandler(Maximize);
+            btnMaximize.Visible = MaximizeButton;
             pnlTop.Controls.Add(btnMaximize);
 
             btnClose.ForeColor = Color.White;
@@ -197,14 +205,14 @@ namespace WindowsUI
             lblProgram.MouseDown += new MouseEventHandler(DoDrag);
             pnlTop.Controls.Add(lblProgram);
 
-            Aero.ChangeAccent(Handle, new Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = Enums.AccentState.ACCENT_ENABLE_BLURBEHIND });
-            if(ExtraDropShadow)
+            Aero.ChangeAccent(Handle, new Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = FormAccentState });
+            if (ExtraDropShadow)
                 Shadow.AddShadow(Handle);
         }
 
         private void Close(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            this.Close();
         }
 
         private void Maximize(object sender, EventArgs e)
@@ -228,18 +236,17 @@ namespace WindowsUI
 
         private void DoDrag(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if(Drag)
+            Control cntrl = (Control)sender;
+            if (Drag)
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    Control cntrl = (Control)sender;
-
                     Aero.ChangeAccent(Handle, new Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = Enums.AccentState.ACCENT_DISABLED });
                     this.Opacity = 0.85;
                     cntrl.Cursor = Cursors.Hand;
                     WinAPI.ReleaseCapture();
                     WinAPI.SendMessage(Handle, Constants.WM_NCLBUTTONDOWN, Constants.HT_CAPTION, 0);
-                    Aero.ChangeAccent(Handle, new Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = Enums.AccentState.ACCENT_ENABLE_BLURBEHIND });
+                    Aero.ChangeAccent(Handle, new Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = FormAccentState });
                     this.Opacity = 1;
                     cntrl.Cursor = Cursors.Default;
                 }

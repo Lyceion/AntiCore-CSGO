@@ -133,6 +133,7 @@
     <Compile Include="SDK\Game\Offsets\Netvars.cs" />
     <Compile Include="SDK\Game\Offsets\OffsetsManager.cs" />
     <Compile Include="SDK\Game\Offsets\Signatures.cs" />
+    <Compile Include="SDK\SDKGlobals.cs" />
     <Compile Include="SDK\Memory\CylMemLite.cs" />
     <Compile Include="SDK\SDKManager.cs" />
     <Compile Include="Versions\ALPHA\Main.cs">

@@ -4,11 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text;
 
-/*
-Credits : https://github.com/lysep-corp/LSDebug
-Specialy thanks to LYSEP Corp.  <3
-*/
-#pragma warning disable CS1998 // Zaman uyumsuz yöntemde 'await' işleçleri yok ve zaman uyumlu çalışacak
 namespace LSDebug
 {
     public enum TextType
@@ -125,7 +120,7 @@ namespace LSDebug
     #endregion
 
     #region LSDebugUI Main
-    class LSDebugUI : Form
+    class LSDebugUI : WindowsUI.WinForm
     {
         private LSDebug LST = new LSDebug();
         private LSDebugVariable LSTV = new LSDebugVariable();
@@ -147,7 +142,7 @@ namespace LSDebug
             {
                 Controls.Add(LST);
             }
-            Size = new Size(1280, 720);
+            Size = new Size(1000, 600);
 
             LST.Visible = true;
             LST.Dock = DockStyle.Fill;
@@ -155,6 +150,13 @@ namespace LSDebug
             LSTV.Visible = true;
             LSTV.Dock = DockStyle.Fill;
 
+            FormAccentState = WindowsUI.Enums.AccentState.ACCENT_ENABLE_BLURBEHIND;
+            LST.ForeColor = Color.Black;
+            CloseButton = false;
+            MaximizeButton = true;
+            MinimizeBox = true;
+            ShowControlBarIcon = false;
+            Title = Text;
         }
 
         public bool Symbolizator
@@ -215,37 +217,70 @@ namespace LSDebug
         //}
         #endregion
         #region VariableDebugger
+        public async void SetVariable(string VariableName, short value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+        public async void SetVariable(string VariableName, int value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+        public async void SetVariable(string VariableName, IntPtr value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+        public async void SetVariable(string VariableName, float value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+        public async void SetVariable(string VariableName, double value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+        public async void SetVariable(string VariableName, byte value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+        public async void SetVariable(string VariableName, char value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+        public async void SetVariable(string VariableName, string value, string GroupName)
+        {
+            LSTV.SetVariable(VariableName, value, GroupName);
+        }
+
         public async void SetVariable(string VariableName, short value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void SetVariable(string VariableName, int value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void SetVariable(string VariableName, IntPtr value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void SetVariable(string VariableName, float value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void SetVariable(string VariableName, double value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void SetVariable(string VariableName, byte value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void SetVariable(string VariableName, char value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void SetVariable(string VariableName, string value)
         {
-            LSTV.SetVariable(VariableName, value);
+            LSTV.SetVariable(VariableName, value, "NonGroup");
         }
         public async void ClearAllVariables()
         {
@@ -253,7 +288,7 @@ namespace LSDebug
         }
         public void EnableVariableDebugger()
         {
-            Controls.Clear();
+            Controls.Remove(LST);
             SPC.BackColor = Color.FromArgb(23, 23, 23);
             SPC.Dock = DockStyle.Fill;
             SPC.Visible = true;
@@ -270,7 +305,9 @@ namespace LSDebug
 
         public void DisableVariableDebugger()
         {
-            Controls.Clear();
+            Controls.Remove(SPC);
+            Controls.Remove(LST);
+            Controls.Remove(LSTV);
             Controls.Add(LST);
             PrintLine("Variable Debugger disabled.", TextType.Info);
         }
@@ -358,7 +395,6 @@ namespace LSDebug
             BorderStyle = BorderStyle.None;
             ReadOnly = true;
             Cursor = Cursors.Default;
-            CheckForIllegalCrossThreadCalls = false;
         }
 
         #region Hex Dumping
@@ -717,7 +753,10 @@ namespace LSDebug
             EnableHeadersVisualStyles = false;
             //RowPostPaint += RowPostPaintEvent;
             DataGridViewCell cellTemplate = new DataGridViewTextBoxCell();
-
+            DataGridViewColumn groupColumn = new DataGridViewColumn();
+            groupColumn.Name = "Group";
+            groupColumn.HeaderText = "Group";
+            groupColumn.CellTemplate = cellTemplate;
             DataGridViewColumn nameColumn = new DataGridViewColumn();
             nameColumn.Name = "Name";
             nameColumn.HeaderText = "Name";
@@ -735,10 +774,51 @@ namespace LSDebug
             typeColumn.HeaderText = "Type";
             typeColumn.CellTemplate = cellTemplate;
             typeColumn.Width = 50;
+            Columns.Add(groupColumn);
             Columns.Add(nameColumn);
             Columns.Add(valueColumn);
             Columns.Add(hexColumn);
             Columns.Add(typeColumn);
+
+        }
+        private bool IsRepeatedCellValue(int rowIndex, int colIndex)
+        {
+            DataGridViewCell currCell =
+               Rows[rowIndex].Cells[colIndex];
+            DataGridViewCell prevCell =
+               Rows[rowIndex - 1].Cells[colIndex];
+
+            if ((currCell.Value == prevCell.Value) ||
+               (currCell.Value != null && prevCell.Value != null &&
+               currCell.Value.ToString() == prevCell.Value.ToString()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        protected override void OnCellPainting(DataGridViewCellPaintingEventArgs args)
+        {
+            base.OnCellPainting(args);
+
+            args.AdvancedBorderStyle.Bottom =
+              DataGridViewAdvancedCellBorderStyle.None;
+
+            // Ignore column and row headers and first row
+            if (args.RowIndex < 1 || args.ColumnIndex < 0)
+                return;
+
+            if (IsRepeatedCellValue(args.RowIndex, args.ColumnIndex))
+            {
+                args.AdvancedBorderStyle.Top =
+                  DataGridViewAdvancedCellBorderStyle.None;
+            }
+            else
+            {
+                args.AdvancedBorderStyle.Top = AdvancedCellBorderStyle.Top;
+            }
         }
         //public void RowPostPaintEvent(object sender, DataGridViewRowPostPaintEventArgs e)
         //{
@@ -767,6 +847,17 @@ namespace LSDebug
             }
             return false;
         }
+        public bool CheckInRowVG(string VariableName, string Group)
+        {
+            string ss = Group + VariableName;
+            foreach (DataGridViewRow item in Rows)
+            {
+                if (item.Cells[0].Value != null && item.Cells[1].Value != null)
+                    if ((item.Cells[0].Value.ToString() + item.Cells[1].Value.ToString()).Equals(ss))
+                        return true;
+            }
+            return false;
+        }
         public int GetIndexByVarName(string VariableName)
         {
             for (int i = 0; i < Rows.Count; i++)
@@ -778,37 +869,68 @@ namespace LSDebug
             }
             return -1;
         }
+        public int GetIndexByVGName(string VariableName, string Group)
+        {
+            string ss = Group + VariableName;
+            for (int i = 0; i < Rows.Count; i++)
+            {
+                DataGridViewRow element = Rows[i];
+                if (element.Cells[0].Value != null && element.Cells[1].Value != null)
+                    if ((element.Cells[0].Value.ToString() + element.Cells[1].Value.ToString()).Equals(ss))
+                    {
+                        return i;
+                    }
+            }
+            return -1;
+        }
+        protected override void OnCellFormatting(
+          DataGridViewCellFormattingEventArgs args)
+        {
+            // Call home to base
+            base.OnCellFormatting(args);
+
+            // First row always displays
+            if (args.RowIndex == 0)
+                return;
+
+
+            if (IsRepeatedCellValue(args.RowIndex, args.ColumnIndex))
+            {
+                args.Value = string.Empty;
+                args.FormattingApplied = true;
+            }
+        }
         private string tmpv = "";
         private int tmpin;
 
-        public void SetVariable(string VariableName, int value)
+        public async void SetVariable(string VariableName, int value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
-                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
+                Rows[tmpin].Cells[2].Value = value;
+                Rows[tmpin].Cells[3].Value = String.Format("0x{0}", value.ToString("X8"));
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
-                    Rows[i].Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
+                    Rows[i].Cells[2].Value = value;
+                    Rows[i].Cells[3].Value = String.Format("0x{0}", value.ToString("X8"));
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
-                row.Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
-                row.Cells[3].Value = "int";
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
+                row.Cells[3].Value = String.Format("0x{0}", value.ToString("X8"));
+                row.Cells[4].Value = "int";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -818,34 +940,34 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
-        public void SetVariable(string VariableName, IntPtr value)
+        public async void SetVariable(string VariableName, IntPtr value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
-                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
+                Rows[tmpin].Cells[2].Value = value;
+                Rows[tmpin].Cells[3].Value = String.Format("0x{0}", value.ToString("X8"));
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
-                    Rows[i].Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
+                    Rows[i].Cells[2].Value = value;
+                    Rows[i].Cells[3].Value = String.Format("0x{0}", value.ToString("X8"));
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
-                row.Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
-                row.Cells[3].Value = "IntPtr";
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
+                row.Cells[3].Value = String.Format("0x{0}", value.ToString("X8"));
+                row.Cells[4].Value = "IntPtr";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -855,34 +977,34 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
-        public void SetVariable(string VariableName, float value)
+        public async void SetVariable(string VariableName, float value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
-                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
+                Rows[tmpin].Cells[2].Value = value;
+                Rows[tmpin].Cells[3].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
-                    Rows[i].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
+                    Rows[i].Cells[2].Value = value;
+                    Rows[i].Cells[3].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
-                row.Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
-                row.Cells[3].Value = "float";
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
+                row.Cells[3].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
+                row.Cells[4].Value = "float";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -892,34 +1014,34 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0sx{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
-        public void SetVariable(string VariableName, double value)
+        public async void SetVariable(string VariableName, double value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
-                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
+                Rows[tmpin].Cells[2].Value = value;
+                Rows[tmpin].Cells[3].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
-                    Rows[i].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
+                    Rows[i].Cells[2].Value = value;
+                    Rows[i].Cells[3].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
-                row.Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
-                row.Cells[3].Value = "double";
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
+                row.Cells[3].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
+                row.Cells[4].Value = "double";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -929,34 +1051,34 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
-        public void SetVariable(string VariableName, short value)
+        public async void SetVariable(string VariableName, short value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
-                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", value.ToString("X4"));
+                Rows[tmpin].Cells[2].Value = value;
+                Rows[tmpin].Cells[3].Value = String.Format("0x{0}", value.ToString("X4"));
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
-                    Rows[i].Cells[2].Value = String.Format("0x{0}", value.ToString("X4"));
+                    Rows[i].Cells[2].Value = value;
+                    Rows[i].Cells[3].Value = String.Format("0x{0}", value.ToString("X4"));
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
-                row.Cells[2].Value = String.Format("0x{0}", value.ToString("X4"));
-                row.Cells[3].Value = "short";
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
+                row.Cells[3].Value = String.Format("0x{0}", value.ToString("X4"));
+                row.Cells[4].Value = "short";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -966,34 +1088,34 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
-        public void SetVariable(string VariableName, byte value)
+        public async void SetVariable(string VariableName, byte value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
-                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", value.ToString("X2"));
+                Rows[tmpin].Cells[2].Value = value;
+                Rows[tmpin].Cells[3].Value = String.Format("0x{0}", value.ToString("X2"));
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
-                    Rows[i].Cells[2].Value = String.Format("0x{0}", value.ToString("X2"));
+                    Rows[i].Cells[2].Value = value;
+                    Rows[i].Cells[3].Value = String.Format("0x{0}", value.ToString("X2"));
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
-                row.Cells[2].Value = String.Format("0x{0}", value.ToString("X2"));
-                row.Cells[3].Value = "byte";
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
+                row.Cells[3].Value = String.Format("0x{0}", value.ToString("X2"));
+                row.Cells[4].Value = "byte";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -1003,34 +1125,34 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
-        public void SetVariable(string VariableName, char value)
+        public async void SetVariable(string VariableName, char value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
-                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
+                Rows[tmpin].Cells[2].Value = value;
+                Rows[tmpin].Cells[3].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
-                    Rows[i].Cells[2].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
+                    Rows[i].Cells[2].Value = value;
+                    Rows[i].Cells[3].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
-                row.Cells[2].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
-                row.Cells[3].Value = "char";
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
+                row.Cells[3].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
+                row.Cells[4].Value = "char";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -1040,40 +1162,40 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
-        public void SetVariable(string VariableName, string value)
+        public async void SetVariable(string VariableName, string value, string GroupName)
         {
-            if (tmpv.Equals(VariableName))
+            if (tmpv.Equals(GroupName + VariableName))
             {
-                Rows[tmpin].Cells[1].Value = value;
+                Rows[tmpin].Cells[2].Value = value;
                 string buffer = "";
                 Array.ForEach(Encoding.Unicode.GetBytes(value), x => buffer += x.ToString("X2") + " ");
-                Rows[tmpin].Cells[2].Value = String.Format("{0}", buffer);
+                Rows[tmpin].Cells[3].Value = String.Format("{0}", buffer);
                 return;
             }
-            tmpv = VariableName;
-            if (CheckInRow(VariableName))
+            tmpv = GroupName + VariableName;
+            if (CheckInRowVG(VariableName, GroupName))
             {
-                int i = GetIndexByVarName(VariableName);
+                int i = GetIndexByVGName(VariableName, GroupName);
                 tmpin = i;
-
                 if (i >= 0)
                 {
-                    Rows[i].Cells[1].Value = value;
+                    Rows[i].Cells[2].Value = value;
                     string buffer = "";
                     Array.ForEach(Encoding.Unicode.GetBytes(value), x => buffer += x.ToString("X2") + " ");
-                    Rows[i].Cells[2].Value = String.Format("{0}", buffer);
+                    Rows[i].Cells[3].Value = String.Format("{0}", buffer);
                 }
             }
             else
             {
                 DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
                 row.Tag = VariableName;
-                row.Cells[0].Value = VariableName;
-                row.Cells[1].Value = value;
+                row.Cells[0].Value = GroupName;
+                row.Cells[1].Value = VariableName;
+                row.Cells[2].Value = value;
                 string buffer = "";
                 Array.ForEach(Encoding.Unicode.GetBytes(value), x => buffer += x.ToString("X2") + " ");
-                row.Cells[2].Value = String.Format("{0}", buffer);
-                row.Cells[3].Value = "string";
+                row.Cells[3].Value = String.Format("{0}", buffer);
+                row.Cells[4].Value = "string";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 
@@ -1087,4 +1209,3 @@ namespace LSDebug
     }
     #endregion
 }
-#pragma warning restore CS1998

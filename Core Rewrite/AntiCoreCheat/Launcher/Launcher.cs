@@ -144,6 +144,7 @@ namespace AntiCoreCheat.Launcher
             Logger.LSDebug.Icon = Icon;
 #endif
             Logger.LSDebug.PrintLine("This debugger is powered by LSDebugger. github/lysep-corp", Color.DarkOrange);
+            Logger.LSDebug.PrintLine("This debugger is powered by LSDebugger. github/lysep-corp", Color.DarkOrange);
             Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + " has been invoked! Client Hello.", LSDebug.TextType.Safe);
             panelMain.Controls.Add(main);
             BringToFront();

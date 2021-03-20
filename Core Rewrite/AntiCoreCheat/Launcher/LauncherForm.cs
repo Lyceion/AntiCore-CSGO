@@ -30,11 +30,11 @@ namespace AntiCoreCheat.Launcher
                     Logger.LSDebug.Debug();
                     Logger.LSDebug.Icon = Icon;
         #endif
-                    Logger.LSDebug.PrintLine("This debugger is powered by LSDebugger. github/lysep-corp", Color.DarkOrange);
-                    Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + " has been invoked! Client Hello.", LSDebug.TextType.Safe);
-                    Versions.Dock = DockStyle.Fill;
-                    plMain.Controls.Add(Versions);
-                    BringToFront();
+            Logger.LSDebug.PrintLine("This debugger is powered by LSDebugger. github/lysep-corp", Color.DarkOrange);
+            Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + " has been invoked! Client Hello.", LSDebug.TextType.Safe);
+            Versions.Dock = DockStyle.Fill;
+            plMain.Controls.Add(Versions);
+            BringToFront();
         }
 
         private void LauncherForm_FormClosing(object sender, FormClosingEventArgs e)

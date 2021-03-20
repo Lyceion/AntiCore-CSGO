@@ -9,13 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AntiCoreCheat.Features
 {
     class ThreadsCore
     {
-        public static Thread CoreThread = new Thread(new ThreadStart(AntiCore));
-        public static Thread PlayerThread = new Thread(new ThreadStart(PlayerLoop));
         public static List<CSPlayer> PlayerList = new List<CSPlayer>();
         public static CSLocalPlayer LocalPlayer = new CSLocalPlayer();
         public static void PlayerLoop()
@@ -36,11 +35,12 @@ namespace AntiCoreCheat.Features
                     sw.Stop();
                     Logger.LSDebug.PrintLine(string.Format("Updated Players. ({0} Players in list.) - Elapsed time: {1}ms", PlayerList.Count, sw.ElapsedMilliseconds), LSDebug.TextType.Success);
                     UpdateGrid();
-                    do
-                    {
+                    for(int i = 0; i < 50; i++)
                         CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 235);
-                    } while (CylMemLite.CRead<byte>(Modules.ClientDLLAdress + Signatures.force_update_spectator_glow) != 235);
-                    Thread.Sleep(5000);
+                    //SDK.Functions.Helpers.Sleep(5000);
+                    Application.DoEvents();
+                    Thread.Sleep(100);
+                    Application.DoEvents();
                 }
             }
         }
@@ -64,7 +64,9 @@ namespace AntiCoreCheat.Features
                                 player.Glow(0.254f, 0.236f, 0.124f, 2);
                         }
                     }
+                    Application.DoEvents();
                     Thread.Sleep(5000);
+                    Application.DoEvents();
                 }
                 catch
                 {
@@ -77,7 +79,9 @@ namespace AntiCoreCheat.Features
         {
             foreach (var Player in PlayerList)
             {
-                Logger.LSDebug.SetVariable(Player.Name, Player.WeaponName);
+                Logger.LSDebug.SetVariable("Weapon Name", Player.WeaponName, Player.Name);
+                Logger.LSDebug.SetVariable("Health", Player.Health, Player.Name);
+                Logger.LSDebug.SetVariable("Armor", Player.ArmorValue, Player.Name);
             }
         }
     }

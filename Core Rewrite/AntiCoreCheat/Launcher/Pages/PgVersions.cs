@@ -29,7 +29,7 @@ namespace AntiCoreCheat.Launcher.Pages
         {
             Parent.Parent.Hide();
             Application.DoEvents();
-            Versions.Globals.VersionMainCheatForm.Show();
+            Versions.Globals.version_Alpha.VersionAlphaInfo.CheatForm.Show();
         }
     }
 }
