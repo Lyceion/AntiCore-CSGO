@@ -16,7 +16,7 @@ namespace AntiCoreCheat
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Launcher.Launcher());
+            Application.Run(new Launcher.LauncherForm());
         }
     }
 }

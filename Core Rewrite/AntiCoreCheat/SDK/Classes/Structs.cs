@@ -29,19 +29,6 @@ namespace AntiCoreCheat.SDK.Classes
 			 bool junk3;                 // 0x0032
 		}
 
-        [StructLayout(LayoutKind.Explicit)]
-        public struct glColor
-        {
-            [FieldOffset(0x0)]
-            public float r;
-            [FieldOffset(0x4)]
-            public float g;
-            [FieldOffset(0x8)]
-            public float b;
-            [FieldOffset(0xC)]
-            public float a;
-        }
-
 		[StructLayout(LayoutKind.Sequential)]
 		public struct glow_color
 		{

@@ -20,23 +20,29 @@ namespace AntiCoreCheat.Features
         public static CSLocalPlayer LocalPlayer = new CSLocalPlayer();
         public static void PlayerLoop()
         {
-            var sw = new Stopwatch();
-            sw.Start();
-            PlayerList.Clear();
-            for (int i = 0; i <= Engine.MaxPlayer; i++)
+            while(true)
             {
-                CSPlayer Player = new CSPlayer(i);
-                if ((Player.Team == SDK.Classes.Enums.Team.CounterTerrorist || Player.Team == SDK.Classes.Enums.Team.Terrorist) && Player.EntityIndex != LocalPlayer.EntityIndex && Player.Name != LocalPlayer.Name && LocalPlayer.BaseAddress != Player.BaseAddress)
-                    PlayerList.Add(Player);
+                if (Engine.GameState == SDK.Classes.Enums.GameState.FULL)
+                {
+                    var sw = new Stopwatch();
+                    sw.Start();
+                    PlayerList.Clear();
+                    for (int i = 0; i <= Engine.MaxPlayer; i++)
+                    {
+                        CSPlayer Player = new CSPlayer(i);
+                        if ((Player.Team == SDK.Classes.Enums.Team.CounterTerrorist || Player.Team == SDK.Classes.Enums.Team.Terrorist) && Player.EntityIndex != LocalPlayer.EntityIndex && Player.Name != LocalPlayer.Name && LocalPlayer.BaseAddress != Player.BaseAddress)
+                            PlayerList.Add(Player);
+                    }
+                    sw.Stop();
+                    Logger.LSDebug.PrintLine(string.Format("Updated Players. ({0} Players in list.) - Elapsed time: {1}ms", PlayerList.Count, sw.ElapsedMilliseconds), LSDebug.TextType.Success);
+                    UpdateGrid();
+                    do
+                    {
+                        CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 235);
+                    } while (CylMemLite.CRead<byte>(Modules.ClientDLLAdress + Signatures.force_update_spectator_glow) != 235);
+                    Thread.Sleep(5000);
+                }
             }
-            sw.Stop();
-            Logger.LSDebug.PrintLine(string.Format("Updated Players. ({0} Players in list.) - Elapsed time: {1}ms", PlayerList.Count, sw.ElapsedMilliseconds), LSDebug.TextType.Success);
-            UpdateGrid();
-            do
-            {
-                CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 235);
-            } while (CylMemLite.CRead<byte>(Modules.ClientDLLAdress + Signatures.force_update_spectator_glow) != 235);
-                
         }
 
         public static void AntiCore()

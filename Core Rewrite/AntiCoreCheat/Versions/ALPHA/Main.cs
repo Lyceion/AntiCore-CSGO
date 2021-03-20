@@ -28,7 +28,7 @@ namespace AntiCoreCheat.Versions.ALPHA
         {
             mouseDown = true;
             lastLocation = e.Location;
-            Design.Aero.ChangeAccent(Handle, new Design.Aero.AccentPolicy { GradientColor = 0xFD70000, AccentState = Design.Aero.AccentState.ACCENT_DISABLED }, false);
+            WindowsUI.Design.Aero.ChangeAccent(Handle, new WindowsUI.Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = WindowsUI.Enums.AccentState.ACCENT_DISABLED }, false);
             Opacity = 0.85f;
         }
 
@@ -46,19 +46,19 @@ namespace AntiCoreCheat.Versions.ALPHA
         private void Drag_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDown = false;
-            Design.Aero.ChangeAccent(Handle, new Design.Aero.AccentPolicy { GradientColor = 0xFD70000, AccentState = Design.Aero.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND});
+            WindowsUI.Design.Aero.ChangeAccent(Handle, new WindowsUI.Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = WindowsUI.Enums.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND }, false);
             Opacity = 1.0f;
         }
 
         public Main()
         {
             InitializeComponent();
-            Design.Shadow.AddShadow(this.Handle);
+            WindowsUI.Design.Shadow.AddShadow(this.Handle);
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
-            Design.Aero.ChangeAccent(Handle, new Design.Aero.AccentPolicy { GradientColor = 0xFD70000, AccentState = Design.Aero.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND });
+            WindowsUI.Design.Aero.ChangeAccent(Handle, new WindowsUI.Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = WindowsUI.Enums.AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND }, false);
             SDK.SDKManager.Enums.InitalizeResult Result = SDK.SDKManager.SDK_Initalize();
             if(Result == SDK.SDKManager.Enums.InitalizeResult.Succes)
             {

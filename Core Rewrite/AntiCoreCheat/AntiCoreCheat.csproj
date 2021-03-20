@@ -68,14 +68,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Design\Aero.cs" />
     <Compile Include="Design\OvalPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Design\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Design\Shadow.cs" />
     <Compile Include="Design\ToggleSwitch\Renderers\ToggleSwitchAndroidRenderer.cs" />
     <Compile Include="Design\ToggleSwitch\Renderers\ToggleSwitchBrushedMetalRenderer.cs" />
     <Compile Include="Design\ToggleSwitch\Renderers\ToggleSwitchCarbonRenderer.cs" />
@@ -90,6 +88,7 @@
     <Compile Include="Design\ToggleSwitch\ToggleSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Extensions\MicrosoftGrabber.cs" />
     <Compile Include="Features\Settings.cs" />
     <Compile Include="Features\ThreadsCore.cs" />
     <Compile Include="Launcher\Launcher.cs">
@@ -99,11 +98,23 @@
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
     <Compile Include="AntiCore.cs" />
+    <Compile Include="Launcher\LauncherForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Launcher\LauncherForm.Designer.cs">
+      <DependentUpon>LauncherForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Launcher\Pages\MainPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Launcher\Pages\MainPage.Designer.cs">
       <DependentUpon>MainPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Launcher\Pages\PgVersions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Launcher\Pages\PgVersions.Designer.cs">
+      <DependentUpon>PgVersions.cs</DependentUpon>
     </Compile>
     <Compile Include="Logger\LSDebug.cs">
       <SubType>Component</SubType>
@@ -131,11 +142,32 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="Versions\Globals.cs" />
+    <Compile Include="WindowsUI\Constants.cs" />
+    <Compile Include="WindowsUI\Design\Aero.cs" />
+    <Compile Include="WindowsUI\Design\Shadow.cs" />
+    <Compile Include="WindowsUI\Enums.cs" />
+    <Compile Include="WindowsUI\Methods.cs" />
+    <Compile Include="WindowsUI\WinAPI.cs" />
+    <Compile Include="WindowsUI\WinButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WindowsUI\WinForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsUI\WinPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Launcher\Launcher.resx">
       <DependentUpon>Launcher.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Launcher\LauncherForm.resx">
+      <DependentUpon>LauncherForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Launcher\Pages\MainPage.resx">
       <DependentUpon>MainPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Launcher\Pages\PgVersions.resx">
+      <DependentUpon>PgVersions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

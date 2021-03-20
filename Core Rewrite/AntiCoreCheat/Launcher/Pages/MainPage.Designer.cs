@@ -28,46 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonLoad = new AntiCoreCheat.Design.RoundedButton();
-            this.buttonUser = new AntiCoreCheat.Design.RoundedButton();
             this.labelUserInfo = new System.Windows.Forms.Label();
             this.panelUser = new System.Windows.Forms.Panel();
-            this.pictureBoxUserInfo = new AntiCoreCheat.Design.OvalPictureBox();
             this.panelCheats = new System.Windows.Forms.Panel();
             this.labelVACBypass = new System.Windows.Forms.Label();
             this.checkboxVACBypass = new AntiCoreCheat.Design.ToggleSwitch();
+            this.pictureBoxUserInfo = new AntiCoreCheat.Design.OvalPictureBox();
+            this.buttonUser = new AntiCoreCheat.Design.RoundedButton();
+            this.buttonLoad = new AntiCoreCheat.Design.RoundedButton();
             this.panelUser.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserInfo)).BeginInit();
             this.SuspendLayout();
-            // 
-            // buttonLoad
-            // 
-            this.buttonLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.buttonLoad.BorderRadius = 10;
-            this.buttonLoad.FlatAppearance.BorderSize = 0;
-            this.buttonLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonLoad.Location = new System.Drawing.Point(522, 252);
-            this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(132, 36);
-            this.buttonLoad.TabIndex = 16;
-            this.buttonLoad.Text = "Load";
-            this.buttonLoad.UseVisualStyleBackColor = false;
-            this.buttonLoad.Click += new System.EventHandler(this.ButtonLoad_Click);
-            // 
-            // buttonUser
-            // 
-            this.buttonUser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.buttonUser.BorderRadius = 10;
-            this.buttonUser.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.buttonUser.FlatAppearance.BorderSize = 0;
-            this.buttonUser.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.buttonUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.buttonUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUser.Location = new System.Drawing.Point(0, 0);
-            this.buttonUser.Name = "buttonUser";
-            this.buttonUser.Size = new System.Drawing.Size(156, 38);
-            this.buttonUser.TabIndex = 11;
-            this.buttonUser.UseVisualStyleBackColor = false;
             // 
             // labelUserInfo
             // 
@@ -90,16 +61,6 @@
             this.panelUser.Name = "panelUser";
             this.panelUser.Size = new System.Drawing.Size(156, 38);
             this.panelUser.TabIndex = 17;
-            // 
-            // pictureBoxUserInfo
-            // 
-            this.pictureBoxUserInfo.BackColor = System.Drawing.Color.DarkGray;
-            this.pictureBoxUserInfo.Location = new System.Drawing.Point(0, 0);
-            this.pictureBoxUserInfo.Name = "pictureBoxUserInfo";
-            this.pictureBoxUserInfo.Size = new System.Drawing.Size(38, 38);
-            this.pictureBoxUserInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBoxUserInfo.TabIndex = 10;
-            this.pictureBoxUserInfo.TabStop = false;
             // 
             // panelCheats
             // 
@@ -132,6 +93,45 @@
             this.checkboxVACBypass.Size = new System.Drawing.Size(61, 20);
             this.checkboxVACBypass.Style = AntiCoreCheat.Design.ToggleSwitch.ToggleSwitchStyle.Android;
             this.checkboxVACBypass.TabIndex = 21;
+            // 
+            // pictureBoxUserInfo
+            // 
+            this.pictureBoxUserInfo.BackColor = System.Drawing.Color.DarkGray;
+            this.pictureBoxUserInfo.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxUserInfo.Name = "pictureBoxUserInfo";
+            this.pictureBoxUserInfo.Size = new System.Drawing.Size(38, 38);
+            this.pictureBoxUserInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxUserInfo.TabIndex = 10;
+            this.pictureBoxUserInfo.TabStop = false;
+            // 
+            // buttonUser
+            // 
+            this.buttonUser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.buttonUser.BorderRadius = 10;
+            this.buttonUser.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.buttonUser.FlatAppearance.BorderSize = 0;
+            this.buttonUser.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.buttonUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.buttonUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonUser.Location = new System.Drawing.Point(0, 0);
+            this.buttonUser.Name = "buttonUser";
+            this.buttonUser.Size = new System.Drawing.Size(156, 38);
+            this.buttonUser.TabIndex = 11;
+            this.buttonUser.UseVisualStyleBackColor = false;
+            // 
+            // buttonLoad
+            // 
+            this.buttonLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.buttonLoad.BorderRadius = 10;
+            this.buttonLoad.FlatAppearance.BorderSize = 0;
+            this.buttonLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonLoad.Location = new System.Drawing.Point(522, 252);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(132, 36);
+            this.buttonLoad.TabIndex = 16;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = false;
+            this.buttonLoad.Click += new System.EventHandler(this.ButtonLoad_Click);
             // 
             // MainPage
             // 
