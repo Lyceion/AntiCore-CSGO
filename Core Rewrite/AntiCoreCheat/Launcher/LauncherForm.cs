@@ -13,16 +13,15 @@ namespace AntiCoreCheat.Launcher
 {
     public partial class LauncherForm : WinForm
     {
-        public LauncherForm()
+        public LauncherForm() : base()
         {
             InitializeComponent();
         }
 
         private void LauncherForm_Load(object sender, EventArgs e)
         {
-
         }
-
+        
         public static Pages.PgVersions Versions = new Pages.PgVersions();
         private void LauncherForm_Shown(object sender, EventArgs e)
         {

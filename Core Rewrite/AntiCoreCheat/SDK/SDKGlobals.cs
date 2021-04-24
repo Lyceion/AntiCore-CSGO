@@ -12,5 +12,6 @@ namespace AntiCoreCheat.SDK
     {
         public static List<CSPlayer> PlayerList = new List<CSPlayer>();
         public static CSLocalPlayer LocalPlayer = new CSLocalPlayer();
+        public static OverlayUI.ACOUI oui;
     }
 }

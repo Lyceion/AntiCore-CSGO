@@ -24,7 +24,10 @@ namespace AntiCoreCheat.Versions.ALPHA
         {
             InitializeComponent();
         }
-
+        private void LoadOverlay()
+        {
+            AntiCoreCheat.SDK.SDKGlobals.oui = new AntiCoreCheat.OverlayUI.ACOUI();
+        }
         private void Main_Load(object sender, EventArgs e)
         {
             SDK.SDKManager.Enums.InitalizeResult Result = SDK.SDKManager.SDK_Initalize();
@@ -38,6 +41,8 @@ namespace AntiCoreCheat.Versions.ALPHA
             Globals.version_Alpha.CoreThread.Start();
             foreach(var x in Enum.GetValues(typeof(WindowsUI.Enums.AccentState)))
                 comboBox1.Items.Add(x);
+            LoadOverlay();
+
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
