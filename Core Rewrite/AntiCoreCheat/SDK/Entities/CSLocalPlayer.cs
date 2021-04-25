@@ -140,6 +140,13 @@ namespace AntiCoreCheat.SDK.Entities
                 CylMemLite.CWrite<float>(BaseAddress + Netvars.m_flFlashDuration, value);
             }
         }
+        public float[,] ViewMatrix
+        {
+            get
+            {
+                return CylMemLite.ReadMatrix<float>((IntPtr)Signatures.dwViewMatrix, 4,4);
+            }
+        }
 #pragma warning restore CS0108
     }
 }

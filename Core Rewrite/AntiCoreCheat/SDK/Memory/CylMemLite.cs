@@ -402,13 +402,23 @@ namespace AntiCoreCheat.SDK.Memory
             return buffer;
         }
 
-        public static float[] ReadMatrix<T>(int Address, int MatrixSize) where T : struct
+        public static float[] ReadArray<T>(IntPtr Address, int ArrayLength) where T : struct
         {
             uint m_iBytesRead = 0;
             var ByteSize = Marshal.SizeOf(typeof(T));
-            byte[] buffer = new byte[ByteSize * MatrixSize];
+            byte[] buffer = new byte[ByteSize * ArrayLength];
             NativeMethods.ReadProcessMemory(ProcessHandle, (IntPtr)Address, buffer, (uint)buffer.Length, ref m_iBytesRead);
             return ConvertToFloatArray(buffer);
+        }
+        public static float[,] ReadMatrix<T>(IntPtr Address, int row,int col) where T : struct
+        {
+            uint m_iBytesRead = 0;
+            var ByteSize = Marshal.SizeOf(typeof(T));
+            byte[] buffer = new byte[ByteSize * row * col];
+            float[,] matrix = new float[row, col];
+            NativeMethods.ReadProcessMemory(ProcessHandle, (IntPtr)Address, buffer, (uint)buffer.Length, ref m_iBytesRead);
+            Buffer.BlockCopy(buffer, 0, matrix, 0, ByteSize * row * col);
+            return matrix;
         }
 
         #region Conversion

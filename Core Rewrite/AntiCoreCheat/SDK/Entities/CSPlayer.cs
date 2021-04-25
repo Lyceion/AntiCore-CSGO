@@ -282,9 +282,9 @@ namespace AntiCoreCheat.SDK.Entities
         //    return BonePos;
         //}
 
-        //public Vector3 Position(int entB)
-        //{
-        //    return CylMem.CRead<Vector3>(entB + m_vecOrigin);
-        //}
+        public float[] Position()
+        {
+            return SDK.Memory.CylMemLite.ReadArray<float>(BaseAddress + SDK.Game.Offsets.Netvars.m_vecOrigin,3);
+        }
     }
 }
