@@ -33,7 +33,7 @@ namespace AntiCoreCheat.Features
                             PlayerList.Add(Player);
                     }
                     sw.Stop();
-                    Logger.LSDebug.PrintLine(string.Format("Updated Players. ({0} Players in list.) - Elapsed time: {1}ms", PlayerList.Count, sw.ElapsedMilliseconds), LSDebug.TextType.Success);
+                    //Logger.LSDebug.PrintLine(string.Format("Updated Players. ({0} Players in list.) - Elapsed time: {1}ms", PlayerList.Count, sw.ElapsedMilliseconds), LSDebug.TextType.Success);
                     UpdateGrid();
                     for(int i = 0; i < 50; i++)
                         CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 235);

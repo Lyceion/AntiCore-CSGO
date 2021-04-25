@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Drawing;
 namespace AntiCoreCheat.SDK.Functions
 {
     class Parsers
@@ -174,7 +174,36 @@ namespace AntiCoreCheat.SDK.Functions
             }
         }
         #endregion
+        #region DisplayFunctions
+        public static bool WorldToScreen(float[,] viewMatrix, ref float[] position, ref float[] screenPosition,Rectangle clientRectangle)
+        {
+            float w = 0.0F;
+            screenPosition[0] = viewMatrix[0,0] * position[0] + viewMatrix[0,1] * position[1] + viewMatrix[0,2] * position[2] + viewMatrix[0,3];
+            screenPosition[1] = viewMatrix[1,0] * position[0] + viewMatrix[1,1] * position[1] + viewMatrix[1,2] * position[2] + viewMatrix[1,3];
+            w = viewMatrix[3,0] * position[0] + viewMatrix[3,1] * position[1] + viewMatrix[3,2] * position[2] + viewMatrix[3,3];
 
+            if (w < 0.1F)
+                return false;
+
+            float inv = 1.0F / w;
+            screenPosition[0] *= inv;
+            screenPosition[1] *= inv;
+
+            int width = clientRectangle.Width;
+            int height = clientRectangle.Height;
+
+            float x = width / 2;
+            float y = height / 2;
+
+            x += (float)(0.5F * screenPosition[0] * width + 0.5F);
+            y -= (float)(0.5F * screenPosition[1] * height + 0.5F);
+
+            screenPosition[0] = x + clientRectangle.X;
+            screenPosition[1] = y + clientRectangle.Y;
+
+            return true;
+        }
+        #endregion
         //#region AngleParsers
         //public static Vector3 ClampAngle(Vector3 angle)
         //{

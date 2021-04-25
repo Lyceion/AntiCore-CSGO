@@ -11,7 +11,7 @@ namespace WindowsUI
 {
     public class WinForm : Form
     {
-        public WinForm()
+        public WinForm() : base()
         {
             this.FormBorderStyle = FormBorderStyle.None;
             this.BackColor = Color.FromArgb(33, 33, 33);
@@ -208,7 +208,10 @@ namespace WindowsUI
             Aero.ChangeAccent(Handle, new Enums.AccentPolicy { GradientColor = 0xFD70000, AccentState = FormAccentState });
             if (ExtraDropShadow)
                 Shadow.AddShadow(Handle);
+            
         }
+        
+        
 
         private void Close(object sender, EventArgs e)
         {

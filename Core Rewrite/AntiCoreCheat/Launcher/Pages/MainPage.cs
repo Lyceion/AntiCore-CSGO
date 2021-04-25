@@ -123,7 +123,7 @@ namespace AntiCoreCheat.Launcher.Pages
             Refresh();
             Launcher.DrawOutline();
         }
-
+        
         private void ButtonLoad_Click(object sender, EventArgs e)
         {
             Parent.Parent.Hide();

@@ -24,10 +24,14 @@ namespace AntiCoreCheat.Versions.ALPHA
         {
             InitializeComponent();
         }
-
+        private void LoadOverlay()
+        {
+            AntiCoreCheat.SDK.SDKGlobals.oui = new AntiCoreCheat.OverlayUI.ACOUI();
+        }
         private void Main_Load(object sender, EventArgs e)
         {
             SDK.SDKManager.Enums.InitalizeResult Result = SDK.SDKManager.SDK_Initalize();
+            LoadOverlay();
             if (Result == SDK.SDKManager.Enums.InitalizeResult.Succes)
                 Logger.LSDebug.PrintLine(Logger.GetCurrentMethodName() + " has been invoked!", LSDebug.TextType.Safe);
             else
@@ -38,6 +42,7 @@ namespace AntiCoreCheat.Versions.ALPHA
             Globals.version_Alpha.CoreThread.Start();
             foreach(var x in Enum.GetValues(typeof(WindowsUI.Enums.AccentState)))
                 comboBox1.Items.Add(x);
+
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -49,7 +54,6 @@ namespace AntiCoreCheat.Versions.ALPHA
             for (int i = 0; i < 50; i++)
                 CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 116);
         }
-
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
             for (int i = 0; i < 50; i++)
@@ -59,7 +63,6 @@ namespace AntiCoreCheat.Versions.ALPHA
                 CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 116);
             Environment.Exit(0);
         }
-
         private void btnClose_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < 50; i++)
@@ -69,7 +72,6 @@ namespace AntiCoreCheat.Versions.ALPHA
                 CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 116);
             Environment.Exit(69);
         }
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetFormAccentState((WindowsUI.Enums.AccentState)comboBox1.SelectedItem);
