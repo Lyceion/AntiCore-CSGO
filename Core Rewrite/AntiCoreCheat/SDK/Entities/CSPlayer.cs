@@ -272,19 +272,15 @@ namespace AntiCoreCheat.SDK.Entities
             CylMemLite.CWrite<glow_settings>(Client.GlowObjectManager + ((GlowIndex * 0x38))  + 0x24, glSet);
         }
 
-        //public Vector3 GetBonePos(int bone)
-        //{
-        //    float x = CylMem.ReadFloat(entB + m_dwBoneMatrix + 0x30 * bone + 0x0C);
-        //    float y = CylMem.ReadFloat(entB + m_dwBoneMatrix + 0x30 * bone + 0x1C);
-        //    float z = CylMem.ReadFloat(entB + m_dwBoneMatrix + 0x30 * bone + 0x2C);
-
-        //    Vector3 BonePos = new Vector3(x, y, z);
-        //    return BonePos;
-        //}
+        public float[] GetBonePos(int bone)
+        {
+            Int32 matrix = CylMemLite.CRead<Int32>(BaseAddress + Netvars.m_dwBoneMatrix);
+            return CylMemLite.ReadArray<float>((IntPtr)((matrix + bone) * 0x30),3);
+        }
 
         public float[] Position()
         {
-            return SDK.Memory.CylMemLite.ReadArray<float>(BaseAddress + SDK.Game.Offsets.Netvars.m_vecOrigin,3);
+            return SDK.Memory.CylMemLite.ReadArray<float>(BaseAddress + Netvars.m_vecOrigin,3);
         }
     }
 }
