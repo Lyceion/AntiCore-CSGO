@@ -157,6 +157,17 @@ namespace AntiCoreCheat.OverlayUI
         }
         #endregion
         #region Function Layer 2
+        class RectStater{
+            public RectStater(int i,Rectangle r)
+            {
+                Entity = i;
+                rect = r;
+            }
+            public int Entity;
+            public Rectangle rect;
+        }
+        List<RectStater> rects = new List<RectStater>();
+        int counto = 0;
         void InitializeComponents(object sender, EventArgs e)
         {
             BackColor = Color.Wheat;
@@ -183,14 +194,18 @@ namespace AntiCoreCheat.OverlayUI
                 );
             //SetLayeredWindowAttributes(Handle, (uint)Color.Wheat.ToArgb(), 125, 0x2);
             TopMost = true;
+            
             refreshInterval = new Timer
             {
                 Interval = 13,
 
             };
+            refreshInterval.Enabled = true;
             refreshInterval.Tick += IntervalTick;
             refreshInterval.Start();
             Paint += PaintObjects;
+            
+
 
         }
         private void IntervalTick(object sender, EventArgs e)
@@ -239,42 +254,135 @@ namespace AntiCoreCheat.OverlayUI
                     clientRect.Height,
                     true
                     )) failed = true;
-            float[,] viewMatrix = SDK.SDKGlobals.LocalPlayer.ViewMatrix;
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    //Logger.LSDebug.PrintLine(String.Format("V{0}{1} : {2}", i + 1, j + 1, viewMatrix[i, j]), LSDebug.TextType.Success);
-                    Logger.LSDebug.SetVariable(String.Format("V{0}{1}", i + 1, j + 1), viewMatrix[i, j], "ViewMatrix");
-                }
-            }
-            foreach (SDK.Entities.CSPlayer player in SDK.SDKGlobals.PlayerList)
-            {
-                float[] Position = player.Position();
-                float[] screenPos = { clientRect.X, clientRect.Y };
-                SDK.Functions.Parsers.WorldToScreen(viewMatrix, ref Position,ref screenPos,clientRect);
-                Logger.LSDebug.SetVariable("SX",screenPos[0],player.Name);
-                Logger.LSDebug.SetVariable("SY", screenPos[1], player.Name);
-                Logger.LSDebug.PrintLine(String.Format("DD:{0}",player.Name), LSDebug.TextType.Success);
-            }
-            Logger.LSDebug.SetVariable("CX", clientPos.X, "CSGO Display");
-            Logger.LSDebug.SetVariable("CY", clientPos.Y, "CSGO Display");
-            Logger.LSDebug.SetVariable("C-Top", cRect.Top, "CSGO Client");
-            Logger.LSDebug.SetVariable("C-Right", cRect.Right, "CSGO Client");
-            Logger.LSDebug.SetVariable("C-Bottom", cRect.Bottom, "CSGO Client");
-            Logger.LSDebug.SetVariable("C-Left", cRect.Left, "CSGO Client");
+            Invalidate();
+            //float[,] viewMatrix = SDK.SDKGlobals.LocalPlayer.ViewMatrix;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    for (int j = 0; j < 4; j++)
+            //    {
+            //        //Logger.LSDebug.PrintLine(String.Format("V{0}{1} : {2}", i + 1, j + 1, viewMatrix[i, j]), LSDebug.TextType.Success);
+            //        //Logger.LSDebug.SetVariable(String.Format("V{0}{1}", i + 1, j + 1), viewMatrix[i, j], "ViewMatrix");
+            //    }
+            //}
+
+            //for (int i = 0; i < SDK.Game.Engine.EntityCount; i++)
+            //{
+            //    SDK.Entities.CSPlayer player = new SDK.Entities.CSPlayer(i);
+            //}
+            //try
+            //{
+
+
+            //for (int i = 0; i < 64; i++)
+            //{
+            //    SDK.Entities.CSPlayer Player = new SDK.Entities.CSPlayer(i);
+            //    if ((Player.Team == SDK.Classes.Enums.Team.CounterTerrorist || Player.Team == SDK.Classes.Enums.Team.Terrorist) && Player.EntityIndex != Features.ThreadsCore.LocalPlayer.EntityIndex && Player.Name != Features.ThreadsCore.LocalPlayer.Name && Features.ThreadsCore.LocalPlayer.BaseAddress != Player.BaseAddress)
+            //    {
+            //        float[] Position = Player.Position();
+            //        float[] screenPos = { clientRect.X, clientRect.Y };
+            //        SDK.Functions.Parsers.WorldToScreen(viewMatrix, ref Position, ref screenPos, clientRect);
+
+            //        //Logger.LSDebug.SetVariable("SX",screenPos[0],player.Name);
+            //        //Logger.LSDebug.SetVariable("SY", screenPos[1], player.Name);
+            //        bool iF = false;
+
+            //        foreach (RectStater r in rects)
+            //        {
+            //            if (Player.EntityIndex == r.Entity)
+            //            {
+            //                iF = true;
+            //                r.rect.X = (int)screenPos[0];
+            //                r.rect.Y = (int)screenPos[1];
+            //                r.rect.Width = 20;
+            //                r.rect.Height = 20;
+            //                break;
+            //            }
+            //        }
+            //        if (!iF) rects.Add(new RectStater(Player.EntityIndex, new Rectangle(new Point((int)screenPos[0], (int)screenPos[1]), new Size(20, 20))));
+            //    counto = rects.Count;
+            //    }
+            //}
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.ToString());
+            //}
+            //Logger.LSDebug.SetVariable("CX", clientPos.X, "CSGO Display");
+            //Logger.LSDebug.SetVariable("CY", clientPos.Y, "CSGO Display");
+            //Logger.LSDebug.SetVariable("Player Count", AntiCoreCheat.Features.ThreadsCore.PlayerList.Count, "CSGO Ingame");
+            //Logger.LSDebug.SetVariable("C-Top", cRect.Top, "CSGO Client");
+            //Logger.LSDebug.SetVariable("C-Right", cRect.Right, "CSGO Client");
+            //Logger.LSDebug.SetVariable("C-Bottom", cRect.Bottom, "CSGO Client");
+            //Logger.LSDebug.SetVariable("C-Left", cRect.Left, "CSGO Client");
+
         }
         private void PaintObjects(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
-            using (Pen selPen = new Pen(Color.Red, 1))
+            try
             {
-                g.DrawRectangle(selPen, 0, 0, clientRect.Width-1, clientRect.Height-1);
+
+
+                Graphics g = e.Graphics;
+                g.Clear(Color.Wheat);
+
+                using (Pen selPen = new Pen(Color.Red, 1))
+                {
+
+                    g.DrawRectangle(selPen, 0, 0, clientRect.Width-1, clientRect.Height-1);
+                    float[,] viewMatrix = SDK.SDKGlobals.LocalPlayer.ViewMatrix;
+                    for (int i = 0; i < 64; i++)
+                    {
+                        SDK.Entities.CSPlayer Player = new SDK.Entities.CSPlayer(i);
+                        if ((Player.Team == SDK.Classes.Enums.Team.CounterTerrorist || Player.Team == SDK.Classes.Enums.Team.Terrorist) && Player.EntityIndex != Features.ThreadsCore.LocalPlayer.EntityIndex && Player.Name != Features.ThreadsCore.LocalPlayer.Name && Features.ThreadsCore.LocalPlayer.BaseAddress != Player.BaseAddress)
+                        {
+                            float[] Position = Player.Position();
+                            float[] screenPos = { clientRect.X, clientRect.Y };
+                            if(SDK.Functions.Parsers.WorldToScreen(viewMatrix, ref Position, ref screenPos, clientRect)) { 
+                            g.DrawRectangle(selPen, screenPos[0], screenPos[1], 20, 20);
+
+                            Logger.LSDebug.SetVariable("SX", Position[0], Player.Name);
+                            Logger.LSDebug.SetVariable("SY", Position[1], Player.Name);
+                            Logger.LSDebug.SetVariable("SZ", Position[2], Player.Name);
+                            }
+                            //bool iF = false;
+
+                            //foreach (RectStater r in rects)
+                            //{
+                            //    if (Player.EntityIndex == r.Entity)
+                            //    {
+                            //        iF = true;
+                            //        r.rect.X = (int)screenPos[0];
+                            //        r.rect.Y = (int)screenPos[1];
+                            //        r.rect.Width = 20;
+                            //        r.rect.Height = 20;
+                            //        break;
+                            //    }
+                            //}
+                            //if (!iF) rects.Add(new RectStater(Player.EntityIndex, new Rectangle(new Point((int)screenPos[0], (int)screenPos[1]), new Size(20, 20))));
+                            //counto = rects.Count;
+                        }
+                    }
+                    //    Logger.LSDebug.SetVariable("Rect Count", rects.Count, "CSGO Display");
+                    //    if (rects.Count > 0) {
+                    //        List<RectStater> rr = new List<RectStater>(rects);
+                    //        for (int i = 0; i < counto; i++)
+                    //        {
+                    //            RectStater rect = rects[i];
+                    //            Logger.LSDebug.SetVariable("CSGO WTS", rect.rect.X, "X" + rect.Entity.ToString());
+                    //            Logger.LSDebug.SetVariable("CSGO WTS".ToString(), rect.rect.Y, "Y" + rect.Entity.ToString());
+                    //            g.DrawRectangle(selPen, rect.rect.X, rect.rect.Y, rect.rect.Width, rect.rect.Height);
+
+                    //        }
+                    //}
+                }
+                //Logger.LSDebug.SetVariable("dwViewMatrix", String.Format("0x{0:X}", SDK.Game.Offsets.Signatures.dwViewMatrix-(int)SDK.Game.Modules.ClientDLLAdress), "Signatrues");
 
             }
-            //Logger.LSDebug.SetVariable("dwViewMatrix", String.Format("0x{0:X}", SDK.Game.Offsets.Signatures.dwViewMatrix-(int)SDK.Game.Modules.ClientDLLAdress), "Signatrues");
-            
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                throw;
+            }
         }
         #endregion
         #region Variable Layer 1

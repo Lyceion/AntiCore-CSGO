@@ -70,7 +70,7 @@ namespace AntiCoreCheat.Versions.ALPHA
             Signatures.force_update_spectator_glow = SigScan.ScanPatterna(Modules.ClientDLLName, "EB 07 8B CB E8 ? ? ? ? 83 C7 10").ToInt32() - Modules.ClientDLLAdress.ToInt32();
             for (int i = 0; i < 50; i++)
                 CylMemLite.WriteByte((int)Modules.ClientDLLAdress + Signatures.force_update_spectator_glow, 116);
-            Environment.Exit(69);
+            Environment.Exit(0);
         }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
